@@ -44,6 +44,11 @@ inline T last(C vec) {
     return *vec.rbegin();
 }
 
+template<typename C>
+inline std::size_t size(const C& c) {
+    return c.size();
+}
+
 template<typename R, typename C, typename F>
 inline R map(C c, F f) {
     R r;

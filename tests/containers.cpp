@@ -47,6 +47,11 @@ yTestPackage containers([]{
         });
 
         it("can fold", [=]{
+            auto v = cu::size(std::vector<int>{1,2,3});
+            Assert().isEqual(v, 3);
+        });
+
+        it("can fold", [=]{
             auto val = cu::fold(std::vector<int>{}, [](int acc, int i) { return acc + i; });
             Assert().isEqual(val, 0);
             val = cu::fold(std::vector<int>{1}, [](int acc, int i) { return acc + i; });

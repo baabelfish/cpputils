@@ -54,7 +54,16 @@ yTestPackage chain([]{
                 .isEqual(l, {4, 6, 8});
         });
 
-        it("is lazy", []{
+        it("can chain multiple functions", []{
+            auto l = _(std::vector<int>{1,2,3})
+                        .map([](int i) { return i + 1; })
+                        .map([](int i) { return i * 2; })
+                        .value();
+            Assert()
+                .isEqual(l, {4, 6, 8});
+        });
+
+        it("is somewhat lazy", []{
             auto l = _(std::vector<int>{1,2,3})
                         .map([](int i) { return i + 1; });
 
@@ -69,6 +78,29 @@ yTestPackage chain([]{
             Assert()
                 .isEqual(l1, {4, 6, 8})
                 .isEqual(l2, {6, 9, 12});
+        });
+
+        it("works with all chainables", []{
+            auto filtered = _(std::vector<int>{1,2,3}).filter([](int i) { return i < 3; }).value(),
+                 mapped = _(std::vector<int>{1,2,3}).map([](int i) { return i * 2; }).value();
+            Assert()
+                .isEqual(filtered, {1,2})
+                .isEqual(mapped, {2,4,6});
+        });
+
+        it("works with all returning with function as parameter", []{
+            bool any = _(std::vector<int>{1,2,3}).any([](int i) { return i == 2; }),
+                 none = _(std::vector<int>{1,2,3}).none([](int i) { return i == 5; }),
+                 all = _(std::vector<int>{1,2,3}).all([](int i) { return i > 0 && i < 4; });
+            Assert()
+                .isTrue(any)
+                .isTrue(none)
+                .isTrue(all);
+        });
+
+        it("works with all returning without parameters", []{
+            auto size = _(std::vector<int>{1,2,3}).size();
+            Assert().isEqual(size, 3);
         });
 
     });
