@@ -37,13 +37,6 @@ yTestPackage chain([]{
                     .isEqual(l.value(), {});
         });
 
-        it("works with basic use case", [=]{
-            auto l = _(X);
-            auto r = l.value();
-            Assert().isEqual(r, {1,2,3})
-                    .isEqual(l.value(), {});
-        });
-
         it("can chain multiple functions", [=]{
             auto l = _(X).map([](int i) { return i + 1; })
                          .map([](int i) { return i * 2; })
