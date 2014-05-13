@@ -69,8 +69,8 @@ yTestPackage chain([]{
 
         it("works with all returning with function as parameter", [=]{
             bool any = _(X).any([](int i) { return i == 2; }),
-                 none = _(std::vector<int>{1,2,3}).none([](int i) { return i == 5; }),
-                 all = _(std::vector<int>{1,2,3}).all([](int i) { return i > 0 && i < 4; });
+                 none = _(X).none([](int i) { return i == 5; }),
+                 all = _(X).all([](int i) { return i > 0 && i < 4; });
             Assert().isTrue(any)
                     .isTrue(none)
                     .isTrue(all);

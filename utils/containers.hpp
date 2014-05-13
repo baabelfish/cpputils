@@ -3,32 +3,30 @@
 #include <algorithm>
 
 // TODO:
-// difference
 // findIndex
 // findLastIndex
 // indexOf
-// intersection
-// range
-// union
 // uniq
-// frequencies
 // without
 // zip
 // zipObject
+// frequencies
+// range
+// union
+// difference
+// intersection
 //
 // at
 // contains
-// countBy
 // find
 // groupBy
-// invoke
 // max
 // min
 // minmax
-// pluck (just use map?)
 // reject
 // sample
-// size
+// pluck (just use map?)
+// invoke
 
 namespace cu {
 
