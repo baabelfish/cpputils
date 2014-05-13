@@ -111,5 +111,22 @@ yTestPackage chain([]{
             Assert().isEqual(size, 3);
         });
 
+        it("can do a real world example", []{
+            std::vector<int> example{1,2,3,4,5,6,7,8,9};
+            auto filtered = _(example)
+                        .filter([](int i) { return i < 6; })
+                        .map([](int) { return 1; });
+            bool invariant = filtered
+                                .copy()
+                                .all([](int i) { return i == 1; });
+            auto re = filtered
+                        .map([](int i) { return i + 1; })
+                        .value();
+            Assert()
+                .isTrue(invariant)
+                .isEqual(filtered.value(), {})
+                .isEqual(re, {2, 2, 2, 2, 2});
+        });
+
     });
 });
