@@ -15,6 +15,20 @@
 // without
 // zip
 // zipObject
+//
+// at
+// contains
+// countBy
+// find
+// groupBy
+// invoke
+// max
+// min
+// minmax
+// pluck (just use map?)
+// reject
+// sample
+// size
 
 namespace cu {
 

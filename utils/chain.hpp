@@ -16,6 +16,7 @@ public:
     Chain(T v): v(v) {}
     virtual ~Chain() {}
     T&& value() { return std::move(v); }
+    Chain<T> copy() const { return *this; }
 };
 
 template<typename T>

@@ -1,5 +1,20 @@
 #pragma once
 
+// TODO:
+// compose (just use lambdas?)
+// debounce
+// defer
+// delay
+// memoize
+// once
+// partial
+// throttle
+// wrap
+//
+// identity
+// times
+// uniqueId
+
 #include <functional>
 #include <iostream>
 

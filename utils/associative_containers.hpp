@@ -1,5 +1,10 @@
 #pragma once
 
+// TODO:
+// mapValues
+// merge
+// omit
+
 #include <map>
 #include <vector>
 
