@@ -2,13 +2,29 @@
 
 #include <algorithm>
 
+// TODO:
+// difference
+// findIndex
+// findLastIndex
+// indexOf
+// intersection
+// range
+// union
+// uniq
+// frequencies
+// without
+// zip
+// zipObject
+
 namespace cu {
 
+// TODO: Add optional n
 template<typename C, typename T = typename C::value_type>
 inline T first(C vec) {
     return *vec.begin();
 }
 
+// TODO: Add optional n
 template<typename C, typename T = typename C::value_type>
 inline T last(C vec) {
     return *vec.rbegin();
