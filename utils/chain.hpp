@@ -6,13 +6,14 @@
 #include "containers.hpp"
 #include "functions.hpp"
 
+// FIXME: Remove these macros. Some day...
+
 #define _ChainableUtilities(FUNC)\
 template<typename F>\
 Chain<T>& FUNC(F f) {\
     m_fs.push_back([=](T v) { return std::move(cu::FUNC(std::move(v), f)); });\
     return *this;\
 }
-
 
 #define _ReturningUtilities(FUNC)\
 template<typename F>\
@@ -28,9 +29,6 @@ auto FUNC() -> decltype(cu::FUNC(m_v)) {\
     return cu::FUNC(m_v);\
 }
 
-
-// TODO:
-// custom function
 
 namespace cu {
 
@@ -52,12 +50,18 @@ public:
         m_v(v) {}
     virtual ~Chain() {}
 
+    virtual Chain<T> copy() const { return *this; }
+
+    template<typename F>
+    Chain<T>& custom(F f) {
+        m_fs.push_back(f);
+        return *this;
+    }
+
     virtual T&& value() {
         run();
         return std::move(m_v);
     }
-
-    virtual Chain<T> copy() const { return *this; }
 
     _ChainableUtilities(map)
     _ChainableUtilities(filter)

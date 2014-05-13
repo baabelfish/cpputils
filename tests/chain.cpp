@@ -98,6 +98,15 @@ yTestPackage chain([]{
                 .isTrue(all);
         });
 
+        it("works with custom chainables", []{
+            std::vector<int> custom{1,2,3};
+            auto cs = _(custom)
+                        .custom([](decltype(custom)&& con) {
+                            return con;
+                        });
+            Assert().isEqual(custom, {1,2,3});
+        });
+
         it("works with all returning without parameters", []{
             auto size = _(std::vector<int>{1,2,3}).size();
             Assert().isEqual(size, 3);
