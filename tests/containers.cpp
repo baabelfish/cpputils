@@ -27,19 +27,17 @@ yTestPackage containers([]{
                 .isEqual(nx[3].new_value, 8);
         });
 
+        it("has find", [=]{
+            Assert().isEqual(*cu::find(x, [](int i) { return i > 2; }), 3);
+        });
+
         it("has contains", []{
-            bool c1 = cu::contains("foobar", "foo"),
-                 c2 = cu::contains(L"foobar", L"foo"),
-                 c3 = cu::contains(std::map<int, int>{ {1, 2}, {3, 4} }, 1),
-                 c4 = cu::contains(std::set<int>{ 1, 2, 3, 4 }, 1),
-                 c5 = cu::contains(std::vector<int>{ 1, 2, 3, 4 }, 1),
-                 c9 = cu::contains(std::string("foobar"), "foo");
-            Assert().isTrue(c1);
-            Assert().isTrue(c2);
-            Assert().isTrue(c3);
-            Assert().isTrue(c4);
-            Assert().isTrue(c5);
-            Assert().isTrue(c9);
+            Assert().isTrue(cu::contains("foobar", "foo"))
+                    .isTrue(cu::contains(L"foobar", L"foo"))
+                    .isTrue(cu::contains(std::map<int, int>{ {1, 2}, {3, 4} }, 1))
+                    .isTrue(cu::contains(std::set<int>{ 1, 2, 3, 4 }, 1))
+                    .isTrue(cu::contains(std::vector<int>{ 1, 2, 3, 4 }, 1))
+                    .isTrue(cu::contains(std::string("foobar"), "foo"));
         });
 
         it("has at", []{

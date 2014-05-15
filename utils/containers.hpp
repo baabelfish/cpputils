@@ -17,7 +17,6 @@
 // difference
 // intersection
 
-// find
 // groupBy
 // max
 // min
@@ -32,6 +31,14 @@ namespace cu {
 template<typename T, typename... Args>
 bool contains(T t, Args... args) {
     return internal::contains(t, std::forward<Args>(args)...);
+}
+
+template<typename C, typename T = typename C::value_type, typename F>
+typename C::const_iterator find(const C& c, F f) {
+    for (auto it = begin(c); it != end(c); ++it) {
+        if (f(*it)) { return it; }
+    }
+    return end(c);
 }
 
 template<typename C, typename... Args>
