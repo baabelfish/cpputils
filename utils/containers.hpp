@@ -43,7 +43,7 @@ inline std::vector<T> range(T start, T stop, T step = 1) {
         r.push_back(start);
         start += step;
     };
-    return r;
+    return std::move(r);
 }
 
 template<typename T, typename Validator, typename Generator>
@@ -53,7 +53,7 @@ inline std::vector<T> range(T start, Validator v, Generator g) {
         r.push_back(start);
         start = g(start);
     };
-    return r;
+    return std::move(r);
 }
 
 template<typename R, typename C, typename F, typename T = typename C::value_type>
@@ -62,7 +62,7 @@ inline std::unordered_map<R, std::vector<T>> groupBy(C c, F f) {
     for (auto& x : c) {
         groups[f(x)].push_back(x);
     }
-    return groups;
+    return std::move(groups);
 }
 
 template<typename C, typename T = typename C::value_type>
@@ -73,7 +73,7 @@ inline std::unordered_map<T, std::size_t> frequencies(C c) {
         if (it == freqs.end()) { freqs[x] = 1; }
         else { it->second += 1; }
     }
-    return freqs;
+    return std::move(freqs);
 }
 
 template<typename T>
@@ -125,18 +125,22 @@ inline C unique(C c) {
     if (std::is_sorted(c.begin(), c.end())) {
         auto lit = std::unique(c.begin(), c.end());
         c.resize(std::distance(c.begin(), lit));
-        return c;
     } else {
         C n;
         std::unordered_set<T> uniq;
-        for (auto& x : c) {
-            if (uniq.find(x) == uniq.end()) {
-                n.push_back(x);
-                uniq.insert(x);
+        auto it = c.begin();
+        auto rit = c.begin();
+        while (it != c.end()) {
+            if (uniq.find(*it) == uniq.end()) {
+                *rit = *it;
+                ++rit;
+                uniq.insert(*it);
             }
+            ++it;
         }
-        return n;
+        c.resize(std::distance(c.begin(), rit));
     }
+    return std::move(c);
 }
 
 template<typename T, typename... Args>
@@ -164,7 +168,7 @@ template<typename C, typename... Args>
 inline C at(C c, Args... args) {
     C n;
     internal::at(n, c, std::forward<Args>(args)...);
-    return n;
+    return std::move(n);
 }
 
 // TODO: Add optional n
@@ -189,13 +193,13 @@ inline R map(C c, F f) {
     R r;
     r.resize(c.size());
     std::transform(begin(c), end(c), begin(r), f);
-    return r;
+    return std::move(r);
 }
 
 template<typename C, typename F>
 inline C map(C c, F f) {
     for (auto& x : c) { x = f(x); }
-    return c;
+    return std::move(c);
 }
 
 template<typename C, typename T = typename C::value_type, typename F>
@@ -209,7 +213,7 @@ inline C filter(C c, F f) {
     for (auto& x : c) {
         if (f(x)) { n.push_back(x); }
     }
-    return n;
+    return std::move(n);
 }
 
 template<typename C, typename F>
@@ -218,7 +222,7 @@ inline C reject(C c, F f) {
     for (auto& x : c) {
         if (!f(x)) { n.push_back(x); }
     }
-    return n;
+    return std::move(n);
 }
 
 template<typename C, typename T = typename C::value_type, typename F>

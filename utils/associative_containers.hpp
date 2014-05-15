@@ -28,28 +28,28 @@ template<typename T, typename K, typename V>
 std::vector<T> keys(const std::pair<K, V>& p) {
     std::vector<T> values;
     for (auto it = p.first; it != p.second; ++it) { values.push_back(it->first); }
-    return values;
+    return std::move(values);
 }
 
 template<typename T, typename K, typename V>
 std::vector<T> values(const std::pair<K, V>& p) {
     std::vector<T> values;
     for (auto it = p.first; it != p.second; ++it) { values.push_back(it->second); }
-    return values;
+    return std::move(values);
 }
 
 template<typename C, typename K = typename C::key_type, typename V = typename C::mapped_type>
 std::vector<V> values(const C& m) {
     std::vector<V> values;
     for (auto& x : m) { values.push_back(x.second); }
-    return values;
+    return std::move(values);
 }
 
 template<typename C, typename K = typename C::key_type, typename V = typename C::mapped_type>
 std::vector<K> keys(const C& m) {
     std::vector<K> keys;
     for (auto& x : m) { keys.push_back(x.first); }
-    return keys;
+    return std::move(keys);
 }
 
 } // namespace cu
