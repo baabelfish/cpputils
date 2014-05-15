@@ -31,6 +31,12 @@ yTestPackage function_module([]{
 
         it("has wait", []{ cu::wait(10); });
 
+        it("has wrap", []{
+            auto f = cu::wrap(15, [](int a, int b) { return a + b; });
+            auto v = f(8);
+            Assert().isEqual(v, 23);
+        });
+
         it("has defer", []{
             int test = 0;
             {

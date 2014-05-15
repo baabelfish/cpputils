@@ -10,6 +10,7 @@
 // compose (just use lambdas?)
 
 #include <thread>
+#include <tuple>
 #include <functional>
 #include <iostream>
 #include <string>
@@ -35,9 +36,10 @@ public:
     }
 };
 
-inline void wait(std::size_t ms) {
-    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
-}
+template<typename T, typename F>
+inline internal::Wrap<T, F> wrap(T t, F f) { return internal::Wrap<T, F>(t, f); }
+
+inline void wait(std::size_t ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
 
 template<typename F, typename... Args>
 auto defer(F f, Args... args) -> decltype(std::async(std::launch::deferred, f)) {

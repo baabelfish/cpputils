@@ -12,6 +12,22 @@
 namespace cu {
 namespace internal {
 
+template<typename T, typename F>
+class Wrap {
+    T m_t;
+    F m_f;
+public:
+    Wrap(T t, F f):
+        m_t(t),
+        m_f(f) {}
+    virtual ~Wrap() {}
+
+    template<typename... Args>
+    auto operator()(Args... args) -> decltype(m_f(m_t, std::forward<Args>(args)...)) {
+        return m_f(m_t, std::forward<Args>(args)...);
+    }
+};
+
 template<typename C>
 inline void at(C& n, C c, std::size_t i) {
     n.insert(n.end(), c[i]);
