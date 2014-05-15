@@ -27,8 +27,14 @@ yTestPackage containers([]{
                 .isEqual(nx[3].new_value, 8);
         });
 
-        it("has find", [=]{
+        it("has find", []{
+            std::vector<int> x{1,3,5,6,4,2};
             Assert().isEqual(*cu::find(x, [](int i) { return i > 2; }), 3);
+        });
+
+        it("has findLast", []{
+            std::vector<int> x{1,3,5,6,4,2};
+            Assert().isEqual(*cu::findLast(x, [](int i) { return i > 2; }), 4);
         });
 
         it("has contains", []{

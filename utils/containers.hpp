@@ -4,8 +4,6 @@
 #include "internal.hpp"
 
 // TODO:
-// findIndex
-// findLastIndex
 // indexOf
 // uniq
 // without
@@ -34,11 +32,19 @@ bool contains(T t, Args... args) {
 }
 
 template<typename C, typename T = typename C::value_type, typename F>
-typename C::const_iterator find(const C& c, F f) {
-    for (auto it = begin(c); it != end(c); ++it) {
+typename C::const_reverse_iterator findLast(const C& c, F f) {
+    for (auto it = c.rbegin(); it != c.rend(); ++it) {
         if (f(*it)) { return it; }
     }
-    return end(c);
+    return c.rend();
+}
+
+template<typename C, typename T = typename C::value_type, typename F>
+typename C::const_iterator find(const C& c, F f) {
+    for (auto it = c.begin(); it != c.end(); ++it) {
+        if (f(*it)) { return it; }
+    }
+    return c.end();
 }
 
 template<typename C, typename... Args>
