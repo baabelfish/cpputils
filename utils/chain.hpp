@@ -10,20 +10,20 @@
 
 #define _StaticUtilities(NAMESPACE, FUNC)\
 template<typename... Args>\
-static auto FUNC(Args... args) -> decltype(NAMESPACE::FUNC(std::forward<Args>(args)...)) {\
+inline static auto FUNC(Args... args) -> decltype(NAMESPACE::FUNC(std::forward<Args>(args)...)) {\
     return NAMESPACE::FUNC(std::forward<Args>(args)...);\
 }
 
 #define _ChainableUtilities(NAMESPACE, FUNC)\
 template<typename F>\
-Chain<T>& FUNC(F f) {\
+inline Chain<T>& FUNC(F f) {\
     m_fs.push_back([=](T v) { return std::move(NAMESPACE::FUNC(std::move(v), f)); });\
     return *this;\
 }
 
 #define _ReturningUtilities(NAMESPACE, FUNC)\
 template<typename... Args>\
-auto FUNC(Args... args) -> decltype(NAMESPACE::FUNC(m_v, std::forward<Args>(args)...)) {\
+inline auto FUNC(Args... args) -> decltype(NAMESPACE::FUNC(m_v, std::forward<Args>(args)...)) {\
     run();\
     return NAMESPACE::FUNC(m_v, std::forward<Args>(args)...);\
 }
