@@ -17,7 +17,6 @@
 // difference
 // intersection
 
-// contains
 // find
 // groupBy
 // max
@@ -29,6 +28,11 @@
 // invoke
 
 namespace cu {
+
+template<typename T, typename... Args>
+bool contains(T t, Args... args) {
+    return internal::contains(t, std::forward<Args>(args)...);
+}
 
 template<typename C, typename... Args>
 C at(C c, Args... args) {

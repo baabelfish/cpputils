@@ -27,6 +27,21 @@ yTestPackage containers([]{
                 .isEqual(nx[3].new_value, 8);
         });
 
+        it("has contains", []{
+            bool c1 = cu::contains("foobar", "foo"),
+                 c2 = cu::contains(L"foobar", L"foo"),
+                 c3 = cu::contains(std::map<int, int>{ {1, 2}, {3, 4} }, 1),
+                 c4 = cu::contains(std::set<int>{ 1, 2, 3, 4 }, 1),
+                 c5 = cu::contains(std::vector<int>{ 1, 2, 3, 4 }, 1),
+                 c9 = cu::contains(std::string("foobar"), "foo");
+            Assert().isTrue(c1);
+            Assert().isTrue(c2);
+            Assert().isTrue(c3);
+            Assert().isTrue(c4);
+            Assert().isTrue(c5);
+            Assert().isTrue(c9);
+        });
+
         it("has at", []{
             std::vector<int> x{1,2,3,4};
             auto res = cu::at(x, 1, 2);
