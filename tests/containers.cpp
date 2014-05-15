@@ -1,6 +1,7 @@
 #include "../lib/ytest/ytest.hpp"
 #include "../cu.hpp"
 
+#include <cmath>
 #include <map>
 #include <string>
 
@@ -12,6 +13,17 @@ struct OtherType {
 yTestPackage containers([]{
     describe("container module", []{
         std::vector<int> x{1,2,3,4};
+
+        it("can groupBy", []{
+            std::vector<float> x{1.3, 1.5, 1.2, 2.3, 2.5, 3.7};
+            auto grouped = cu::groupBy<int>(x, [](float i) -> int {
+                return std::floor(i);
+            });
+            Assert().isEqual(grouped.size(), 3);
+            Assert().isEqual(grouped[1].size(), 3);
+            Assert().isEqual(grouped[2].size(), 2);
+            Assert().isEqual(grouped[3].size(), 1);
+        });
 
         it("can find min and max elements", []{
             std::vector<int> x{1,2,3,4,3,0,2};

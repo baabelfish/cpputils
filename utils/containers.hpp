@@ -57,6 +57,15 @@ inline std::vector<T> range(T start, Validator v, Generator g) {
     return r;
 }
 
+template<typename R, typename C, typename F, typename T = typename C::value_type>
+inline std::map<R, std::vector<T>> groupBy(C c, F f) {
+    std::map<R, std::vector<T>> groups;
+    for (auto& x : c) {
+        groups[f(x)].push_back(x);
+    }
+    return groups;
+}
+
 template<typename C, typename T = typename C::value_type>
 inline std::map<T, std::size_t> frequencies(C c) {
     std::map<T, std::size_t> freqs;
