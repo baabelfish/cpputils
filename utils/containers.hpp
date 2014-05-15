@@ -1,6 +1,7 @@
 #pragma once
 
 #include <algorithm>
+#include "internal.hpp"
 
 // TODO:
 // findIndex
@@ -16,7 +17,6 @@
 // difference
 // intersection
 
-// at
 // contains
 // find
 // groupBy
@@ -29,6 +29,13 @@
 // invoke
 
 namespace cu {
+
+template<typename C, typename... Args>
+C at(C c, Args... args) {
+    C n;
+    internal::at(n, c, std::forward<Args>(args)...);
+    return n;
+}
 
 // TODO: Add optional n
 template<typename C, typename T = typename C::value_type>

@@ -27,6 +27,12 @@ yTestPackage containers([]{
                 .isEqual(nx[3].new_value, 8);
         });
 
+        it("has at", []{
+            std::vector<int> x{1,2,3,4};
+            auto res = cu::at(x, 1, 2);
+            Assert().isEqual(res, {2,3});
+        });
+
         it("can manipulate containers", []{
             std::vector<int> x{1,2,3,4};
             cu::each(x, [](int& i) { i = i * 2; });
@@ -52,21 +58,21 @@ yTestPackage containers([]{
         });
 
         it("can fold", [=]{
-            auto val = cu::fold(std::vector<int>{}, [](int acc, int i) { return acc + i; });
-            Assert().isEqual(val, 0);
-            val = cu::fold(std::vector<int>{1}, [](int acc, int i) { return acc + i; });
-            Assert().isEqual(val, 1);
-            val = cu::fold(x, [](int acc, int i) { return acc + i; });
-            Assert().isEqual(val, 10);
+            auto val1 = cu::fold(std::vector<int>{}, [](int acc, int i) { return acc + i; }),
+                 val2 = cu::fold(std::vector<int>{1}, [](int acc, int i) { return acc + i; }),
+                 val3 = cu::fold(x, [](int acc, int i) { return acc + i; });
+            Assert().isEqual(val1, 0);
+            Assert().isEqual(val2, 1);
+            Assert().isEqual(val3, 10);
         });
 
         it("can rfold", [=]{
-            auto val = cu::rfold(std::vector<int>{}, [](int acc, int i) { return acc + i; });
-            Assert().isEqual(val, 0);
-            val = cu::rfold(std::vector<int>{1}, [](int acc, int i) { return acc + i; });
-            Assert().isEqual(val, 1);
-            val = cu::rfold(x, [](int acc, int i) { return acc + i; });
-            Assert().isEqual(val, 10);
+            auto val1 = cu::rfold(std::vector<int>{}, [](int acc, int i) { return acc + i; }),
+                 val2 = cu::rfold(std::vector<int>{1}, [](int acc, int i) { return acc + i; }),
+                 val3 = cu::rfold(x, [](int acc, int i) { return acc + i; });
+            Assert().isEqual(val1, 0);
+            Assert().isEqual(val2, 1);
+            Assert().isEqual(val3, 10);
         });
 
         it("can do otp", [=]{
