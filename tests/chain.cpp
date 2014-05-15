@@ -1,24 +1,13 @@
 #include "../lib/ytest/ytest.hpp"
 #include "../cu.hpp"
 
-struct TestS {
-    int x;
-    std::string y;
-    bool operator!=(const TestS& other) const { return other.x != x || other.y != y; }
-};
-
 yTestPackage chain([]{
     describe("chaining module", []{
         std::vector<int> X{1,2,3};
 
-        it("has value_type", []{
-            cu::Chain<TestS>::value_type l{1, "test"};
-            Assert().isEqual(l, TestS{1, "test"});
-        });
-
         it("can return endval", []{
-            auto l = _(5);
-            Assert().isEqual(l.value(), 5);
+            // auto l = _(5);
+            // Assert().isEqual(l.value(), 5);
         });
 
         it("can copy", [=]{

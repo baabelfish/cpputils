@@ -14,7 +14,6 @@
 // zip
 // lazyrange (with c++17)
 
-// groupBy
 // sample
 // pluck (just use map?)
 // invoke

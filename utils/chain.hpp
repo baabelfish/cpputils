@@ -16,17 +16,10 @@ Chain<T>& FUNC(F f) {\
 }
 
 #define _ReturningUtilities(FUNC)\
-template<typename F>\
-auto FUNC(F f) -> decltype(cu::FUNC(m_v, f)) {\
+template<typename... Args>\
+auto FUNC(Args... args) -> decltype(cu::FUNC(m_v, std::forward<Args>(args)...)) {\
     run();\
-    return cu::FUNC(m_v, f);\
-}
-
-
-#define _ReturningWOPUtilities(FUNC)\
-auto FUNC() -> decltype(cu::FUNC(m_v)) {\
-    run();\
-    return cu::FUNC(m_v);\
+    return cu::FUNC(m_v, std::forward<Args>(args)...);\
 }
 
 
@@ -43,8 +36,6 @@ class Chain {
     }
 
 public:
-    typedef T value_type;
-
     Chain(T v):
         m_fs(),
         m_v(v) {}
@@ -64,12 +55,33 @@ public:
 
     _ChainableUtilities(map)
     _ChainableUtilities(filter)
+    _ChainableUtilities(reject)
+    _ChainableUtilities(sort)
+    _ChainableUtilities(at)
+    _ChainableUtilities(unique)
+    _ChainableUtilities(tap)
+    _ChainableUtilities(listen)
+    _ChainableUtilities(pipe)
+
+    _ReturningUtilities(groupBy)
+    _ReturningUtilities(frequencies)
+    _ReturningUtilities(fold)
+    _ReturningUtilities(rfold)
 
     _ReturningUtilities(all)
     _ReturningUtilities(any)
     _ReturningUtilities(none)
+    _ReturningUtilities(areEqual)
+    _ReturningUtilities(contains)
 
-    _ReturningWOPUtilities(size)
+    _ReturningUtilities(size)
+    _ReturningUtilities(min)
+    _ReturningUtilities(max)
+    _ReturningUtilities(minmax)
+    _ReturningUtilities(find)
+    _ReturningUtilities(findLast)
+    _ReturningUtilities(first)
+    _ReturningUtilities(last)
 };
 
 } // namespace cu

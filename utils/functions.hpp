@@ -23,11 +23,13 @@ inline internal::After<F, Args...> after(std::size_t amount, F f, Args... args) 
     return std::move(internal::After<F, Args...>(amount, f, std::forward<Args>(args)...));
 }
 
-template<typename F> inline internal::Once<F> once(F f) {
+template<typename F>
+inline internal::Once<F> once(F f) {
     return std::move(internal::Once<F>(f));
 }
 
-template<typename T, typename F> inline internal::Wrap<T, F> wrap(T t, F f) {
+template<typename T, typename F>
+inline internal::Wrap<T, F> wrap(T t, F f) {
     return std::move(internal::Wrap<T, F>(t, f));
 }
 
@@ -37,7 +39,8 @@ template<typename F, typename... Args>
 auto defer(F f, Args... args) -> decltype(std::async(std::launch::deferred, f)) {
     return std::async(std::launch::deferred, [](F f, Args... args) {
         f(std::forward<Args>(args)...);
-    }, f, std::forward<Args>(args)...);
+    },
+    f, std::forward<Args>(args)...);
 }
 
 template<typename F, typename... Args>
