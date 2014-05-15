@@ -7,7 +7,6 @@
 
 // TODO:
 // without
-// frequencies
 // range
 // union
 // difference
@@ -24,6 +23,22 @@
 // invoke
 
 namespace cu {
+
+template<typename C, typename T = typename C::value_type>
+inline std::map<T, std::size_t> frequencies(C c) {
+    std::map<T, std::size_t> freqs;
+    for (auto& x : c) {
+        auto it = freqs.find(x);
+        if (it == freqs.end()) { freqs[x] = 1; }
+        else { it->second += 1; }
+    }
+    return freqs;
+}
+
+template<typename T>
+inline std::map<T, std::size_t> frequencies(std::initializer_list<T> c) {
+    return frequencies<std::initializer_list<T>>(c);
+}
 
 template<typename C, typename F>
 inline C sort(C c, F f) {

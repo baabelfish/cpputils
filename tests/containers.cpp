@@ -13,6 +13,12 @@ yTestPackage containers([]{
     describe("container module", []{
         std::vector<int> x{1,2,3,4};
 
+        it("can get frequencies", []{
+            auto freqs = cu::frequencies({1,1,1,2,2,3});
+            Assert().isEqual(freqs[1], 3)
+                    .isEqual(freqs[2], 2);
+        });
+
         it("can sort", []{
             Assert().isEqual(cu::sort(std::vector<int>{1,4,2,3}), {1,2,3,4});
         });
