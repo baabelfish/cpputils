@@ -3,8 +3,8 @@
 // TODO:
 // debounce
 // memoize
-// partial
 // throttle
+// partial
 // compose (just use lambdas?)
 
 #include <vector>
@@ -20,11 +20,16 @@ namespace cu {
 
 template<typename F, typename... Args>
 inline internal::After<F, Args...> after(std::size_t amount, F f, Args... args) {
-    return internal::After<F, Args...>(amount, f, std::forward<Args>(args)...);
+    return std::move(internal::After<F, Args...>(amount, f, std::forward<Args>(args)...));
 }
 
-template<typename F> inline internal::Once<F> once(F f) { return std::move(internal::Once<F>(f)); }
-template<typename T, typename F> inline internal::Wrap<T, F> wrap(T t, F f) { return std::move(internal::Wrap<T, F>(t, f)); }
+template<typename F> inline internal::Once<F> once(F f) {
+    return std::move(internal::Once<F>(f));
+}
+
+template<typename T, typename F> inline internal::Wrap<T, F> wrap(T t, F f) {
+    return std::move(internal::Wrap<T, F>(t, f));
+}
 
 inline void wait(std::size_t ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
 
