@@ -34,8 +34,8 @@ namespace cu {
 
 template<class T>
 class Chain {
-    typedef std::function<T(T v)> function_type;
-    std::vector<function_type> m_fs;
+    typedef std::function<T(T v)> FunctionType;
+    std::vector<FunctionType> m_fs;
     T m_v;
 
     void run() {
@@ -52,8 +52,7 @@ public:
 
     virtual Chain<T> copy() const { return *this; }
 
-    template<typename F>
-    Chain<T>& custom(F f) {
+    Chain<T>& custom(FunctionType f) {
         m_fs.push_back(f);
         return *this;
     }
