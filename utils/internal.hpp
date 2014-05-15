@@ -13,8 +13,41 @@
 namespace cu {
 namespace internal {
 
+namespace aux {
+
+class Uniquable {
+protected:
+    static std::size_t uniqueId() {
+        static std::mutex m;
+        std::lock_guard<std::mutex> l(m);
+        static std::size_t ui = 0;
+        return ui++;
+    }
+};
+
+} // namespace aux
+
+template<typename F, typename... Args>
+class After {
+    std::function<void()> m_f;
+    std::size_t m_calls;
+    std::size_t m_amount;
+
+public:
+    After(std::size_t amount, F f, Args... args):
+        m_f([=]() { f(args...); }),
+        m_calls(0),
+        m_amount(amount) {
+        if (amount == 0) { m_f(); }
+    }
+    virtual ~After() {}
+    void operator()() {
+        if (++m_calls == m_amount) { m_f(); }
+    }
+};
+
 template<class F>
-class Once {
+class Once : aux::Uniquable {
     bool executed;
     std::size_t at;
     F f;
@@ -22,7 +55,7 @@ class Once {
 public:
     Once(F f):
         executed(false),
-        at(0),
+        at(uniqueId()),
         f(f) {}
 
 
@@ -30,14 +63,14 @@ public:
 
     template<typename... Args>
     auto operator()(Args... args) -> decltype(f(std::forward<Args>(args)...)) {
-        static std::mutex m;
         static std::vector<decltype(f(std::forward<Args>(args)...))> Revals;
+        static std::mutex m; // FIXME
 
         if (!executed) {
-            std::lock_guard<std::mutex> l(m);
+            std::lock_guard<std::mutex> l(m); // FIXME
             executed = true;
-            at = Revals.size();
-            Revals.push_back(f(std::forward<Args>(args)...));
+            Revals.emplace_back();
+            Revals[at] = f(std::forward<Args>(args)...);
         }
         return Revals[at];
     }

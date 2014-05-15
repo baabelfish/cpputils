@@ -34,7 +34,7 @@ yTestPackage function_module([]{
         it("has once", []{
             auto f = cu::once([](int a, int b) { return a + b; });
             auto v1 = f(8, 5),
-                 v2 = f(10, 5);
+                 v2 = f(10, 10);
             Assert().isEqual(v1, 13);
             Assert().isEqual(v1, v2);
         });
@@ -99,6 +99,17 @@ yTestPackage function_module([]{
             Assert().isEqual(x, 0);
             aft();
             Assert().isEqual(x, 5);
+        });
+
+        it("can do after with parameters", []{
+            int x = 0;
+            auto aft = cu::after(3, [&](int a){ x = a; }, 10);
+            Assert().isEqual(x, 0);
+            aft();
+            aft();
+            Assert().isEqual(x, 0);
+            aft();
+            Assert().isEqual(x, 10);
         });
 
     });

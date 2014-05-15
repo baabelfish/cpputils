@@ -3,7 +3,6 @@
 // TODO:
 // debounce
 // memoize
-// once
 // partial
 // throttle
 // compose (just use lambdas?)
@@ -19,27 +18,13 @@
 
 namespace cu {
 
-class after {
-    std::function<void()> m_f;
-    std::size_t m_calls = 0;
-    std::size_t m_amount;
-public:
-    after(std::size_t amount, std::function<void()> f):
-        m_f(f),
-        m_calls(0),
-        m_amount(amount) {
-        if (amount == 0) { f(); }
-    }
-    void operator()() {
-        if (++m_calls == m_amount) { m_f(); }
-    }
-};
+template<typename F, typename... Args>
+inline internal::After<F, Args...> after(std::size_t amount, F f, Args... args) {
+    return internal::After<F, Args...>(amount, f, std::forward<Args>(args)...);
+}
 
-template<typename F>
-internal::Once<F> once(F f) { return internal::Once<F>(f); }
-
-template<typename T, typename F>
-inline internal::Wrap<T, F> wrap(T t, F f) { return internal::Wrap<T, F>(t, f); }
+template<typename F> inline internal::Once<F> once(F f) { return std::move(internal::Once<F>(f)); }
+template<typename T, typename F> inline internal::Wrap<T, F> wrap(T t, F f) { return std::move(internal::Wrap<T, F>(t, f)); }
 
 inline void wait(std::size_t ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
 
