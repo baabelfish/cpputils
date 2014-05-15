@@ -1,15 +1,13 @@
 #pragma once
 
 // TODO:
-// compose (just use lambdas?)
 // debounce
-// defer
-// delay
 // memoize
 // once
 // partial
 // throttle
 // wrap
+// compose (just use lambdas?)
 
 #include <thread>
 #include <functional>
@@ -37,13 +35,23 @@ public:
     }
 };
 
+inline void wait(std::size_t ms) {
+    std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+}
+
+template<typename F, typename... Args>
+auto defer(F f, Args... args) -> decltype(std::async(std::launch::deferred, f)) {
+    return std::async(std::launch::deferred, [](F f, Args... args) {
+        f(std::forward<Args>(args)...);
+    }, f, std::forward<Args>(args)...);
+}
+
 template<typename F, typename... Args>
 auto delay(std::size_t ms, F f, Args... args) -> decltype(std::async(std::launch::async, f)) {
-    auto handle = std::async(std::launch::async, [](std::size_t ms, F f, Args... args) {
+    return std::async(std::launch::async, [](std::size_t ms, F f, Args... args) {
         std::this_thread::sleep_for(std::chrono::milliseconds(ms));
         f(std::forward<Args>(args)...);
     }, ms, f, std::forward<Args>(args)...);
-    return handle;
 }
 
 template<typename T, typename... Args>

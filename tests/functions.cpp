@@ -29,13 +29,25 @@ yTestPackage function_module([]{
                     .isEqual(ui4, L"bar_3");
         });
 
+        it("has wait", []{ cu::wait(10); });
+
+        it("has defer", []{
+            int test = 0;
+            {
+                auto handle = cu::defer([&]() { test += 1; });
+                test += 1;
+                handle.get();
+            }
+            Assert().isEqual(test, 2);
+        });
+
         it("has delay", []{
             int test = 0;
             {
-                auto hadle = cu::delay(100, [&]() { test = 2; });
+                auto handle = cu::delay(100, [&]() { test = 2; });
                 test = 1;
             }
-            Assert().isFalse(2);
+            Assert().isEqual(test, 2);
         });
 
         it("has identity", []{
