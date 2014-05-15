@@ -108,7 +108,7 @@ yTestPackage chain([]{
                 std::sort(answer2.begin(), answer2.end());
                 for (auto& x : answer2) { x *= 2; }
             },
-            1.5);
+            2);
 
             Assert().isEqual(answer1, answer2);
         });
