@@ -135,9 +135,8 @@ yTestPackage containers([]{
         it("can access limits", [=]{
             auto first = cu::first(x);
             auto last = cu::last(x);
-            Assert()
-                .isEqual(first, x[0])
-                .isEqual(last, x[x.size() - 1]);
+            Assert().isEqual(first, x[0])
+                    .isEqual(last, x[x.size() - 1]);
         });
 
         it("has size", [=]{
@@ -168,10 +167,9 @@ yTestPackage containers([]{
                  p_any = cu::any(x, [](int i) { return i == 2; }),
                  p_none = cu::none(x, [](int i) { return i > 4; });
 
-            Assert()
-                .isTrue(p_all)
-                .isTrue(p_any)
-                .isTrue(p_none);
+            Assert().isTrue(p_all)
+                    .isTrue(p_any)
+                    .isTrue(p_none);
         });
     });
 });

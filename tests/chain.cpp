@@ -80,9 +80,37 @@ yTestPackage chain([]{
             auto re = _(example).filter([](int i) { return i < 7; })
                                 .unique()
                                 .sort()
-                                .map([](int i) { return i * 2; })
-                                .values();
-            Assert().isEqual(re, {2, 4, 6, 8, 10, 12});
+                                .map([](int i) { return i * 2; });
+            Assert().isEqual(re.values(), {2, 4, 6, 8, 10, 12});
+        });
+
+        it("performs ok", []{
+            std::vector<int> example;
+            for (std::size_t i = 0; i < 100000; ++i) { example.push_back(rand()); }
+            std::vector<int> answer1;
+            std::vector<int> answer2;
+
+            isFasterThan("", [=, &answer1]{
+                answer1 = _(example).filter([](int i) { return i < 7; })
+                                    .unique()
+                                    .sort()
+                                    .map([](int i) { return i * 2; })
+                                    .values();
+            },
+            [=, &answer2]{
+                std::set<int> uniq;
+                for (auto& x : example) {
+                    if (x < 7 && uniq.find(x) == uniq.end()) {
+                        answer2.push_back(x);
+                        uniq.insert(x);
+                    }
+                }
+                std::sort(answer2.begin(), answer2.end());
+                for (auto& x : answer2) { x *= 2; }
+            },
+            1.5);
+
+            Assert().isEqual(answer1, answer2);
         });
 
     });
