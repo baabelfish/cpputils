@@ -12,6 +12,7 @@
 // difference
 // intersection
 // zip
+// lazyrange (with c++17)
 
 // groupBy
 // max
@@ -23,6 +24,26 @@
 // invoke
 
 namespace cu {
+
+template<typename T>
+inline std::vector<T> range(T start, T stop, T step = 1) {
+    std::vector<T> r;
+    while (start < stop) {
+        r.push_back(start);
+        start += step;
+    };
+    return r;
+}
+
+template<typename T, typename Validator, typename Generator>
+inline std::vector<T> range(T start, Validator v, Generator g) {
+    std::vector<T> r;
+    while (v(start)) {
+        r.push_back(start);
+        start = g(start);
+    };
+    return r;
+}
 
 template<typename C, typename T = typename C::value_type>
 inline std::map<T, std::size_t> frequencies(C c) {

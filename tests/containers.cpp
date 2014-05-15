@@ -13,6 +13,14 @@ yTestPackage containers([]{
     describe("container module", []{
         std::vector<int> x{1,2,3,4};
 
+        it("can construct a range", []{
+            Assert().isEqual(cu::range(0, 10), {0,1,2,3,4,5,6,7,8,9});
+        });
+
+        it("can construct a range with generator", []{
+            Assert().isEqual(cu::range(0, [](int i) -> bool { return i < 6; }, [](int i) { return ++i; }), {0,1,2,3,4,5});
+        });
+
         it("can get frequencies", []{
             auto freqs = cu::frequencies({1,1,1,2,2,3});
             Assert().isEqual(freqs[1], 3)
