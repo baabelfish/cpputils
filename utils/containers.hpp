@@ -15,7 +15,6 @@
 // lazyrange (with c++17)
 
 // groupBy
-// reject
 // sample
 // pluck (just use map?)
 // invoke
@@ -202,6 +201,15 @@ inline C filter(C c, F f) {
     C n;
     for (auto& x : c) {
         if (f(x)) { n.push_back(x); }
+    }
+    return n;
+}
+
+template<typename C, typename F>
+inline C reject(C c, F f) {
+    C n;
+    for (auto& x : c) {
+        if (!f(x)) { n.push_back(x); }
     }
     return n;
 }
