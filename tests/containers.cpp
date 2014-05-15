@@ -122,7 +122,12 @@ yTestPackage containers([]{
             }));
         });
 
-        it("can filter", [=]{
+        it("has filter", [=]{
+            auto nx = cu::reject(x, [](int i) { return i > 2; });
+            Assert().isEqual(nx, {1, 2});
+        });
+
+        it("has reject", [=]{
             auto nx = cu::filter(x, [](int i) { return i > 2; });
             Assert().isEqual(nx, {3, 4});
         });
@@ -135,12 +140,12 @@ yTestPackage containers([]{
                 .isEqual(last, x[x.size() - 1]);
         });
 
-        it("can fold", [=]{
+        it("has size", [=]{
             auto v = cu::size(std::vector<int>{1,2,3});
             Assert().isEqual(v, 3);
         });
 
-        it("can fold", [=]{
+        it("has fold", [=]{
             auto val1 = cu::fold(std::vector<int>{}, [](int acc, int i) { return acc + i; }),
                  val2 = cu::fold(std::vector<int>{1}, [](int acc, int i) { return acc + i; }),
                  val3 = cu::fold(x, [](int acc, int i) { return acc + i; });
