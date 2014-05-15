@@ -7,51 +7,51 @@ yTestPackage chain([]{
 
         it("can return endval", []{
             // auto l = _(5);
-            // Assert().isEqual(l.value(), 5);
+            // Assert().isEqual(l.values(), 5);
         });
 
         it("can copy", [=]{
             auto l = _(X);
             auto r = l.copy();
-            Assert().isEqual(r.value(), {1,2,3})
-                    .isEqual(l.value(), {1,2,3});
+            Assert().isEqual(r.values(), {1,2,3})
+                    .isEqual(l.values(), {1,2,3});
         });
 
         it("uses move semantics", [=]{
             auto l = _(X);
-            Assert().isEqual(l.value(), {1,2,3});
+            Assert().isEqual(l.values(), {1,2,3});
 
-            auto r = l.value();
+            auto r = l.values();
             Assert().isEqual(r, {1,2,3})
-                    .isEqual(l.value(), {});
+                    .isEqual(l.values(), {});
         });
 
         it("can chain multiple functions", [=]{
             auto l = _(X).map([](int i) { return i + 1; })
                          .map([](int i) { return i * 2; })
-                         .value();
+                         .values();
             Assert().isEqual(l, {4, 6, 8});
         });
 
         it("can chain multiple functions", [=]{
             auto l = _(X).map([](int i) { return i + 1; })
                          .map([](int i) { return i * 2; })
-                         .value();
+                         .values();
             Assert().isEqual(l, {4, 6, 8});
         });
 
         it("is somewhat lazy", [=]{
             auto l = _(X).map([](int i) { return i + 1; });
-            auto l1 = l.copy().map([](int i) { return i * 2; }).value();
-            auto l2 = l.copy().map([](int i) { return i * 3; }).value();
+            auto l1 = l.copy().map([](int i) { return i * 2; }).values();
+            auto l2 = l.copy().map([](int i) { return i * 3; }).values();
 
             Assert().isEqual(l1, {4, 6, 8})
                     .isEqual(l2, {6, 9, 12});
         });
 
         it("works with all chainables", [=]{
-            auto filtered = _(X).filter([](int i) { return i < 3; }).value(),
-                 mapped = _(X).map([](int i) { return i * 2; }).value();
+            auto filtered = _(X).filter([](int i) { return i < 3; }).values(),
+                 mapped = _(X).map([](int i) { return i * 2; }).values();
             Assert().isEqual(filtered, {1,2})
                     .isEqual(mapped, {2,4,6});
         });
@@ -66,7 +66,7 @@ yTestPackage chain([]{
         });
 
         it("works with custom chainables", [=]{
-            auto cs = _(X).custom([](decltype(X)&& con) { return con; }).value();
+            auto cs = _(X).custom([](decltype(X)&& con) { return con; }).values();
             Assert().isEqual(cs, {1,2,3});
         });
 
@@ -76,15 +76,13 @@ yTestPackage chain([]{
         });
 
         it("can do a real world example", []{
-            std::vector<int> example{1,2,3,4,5,6,7,8,9};
-            auto filtered = _(example).filter([](int i) { return i < 6; })
-                                      .map([](int) { return 1; });
-            bool invariant = filtered.copy().all([](int i) { return i == 1; });
-            auto re = filtered.map([](int i) { return i + 1; }).value();
-
-            Assert().isTrue(invariant)
-                    .isEqual(filtered.value(), {})
-                    .isEqual(re, {2, 2, 2, 2, 2});
+            std::vector<int> example{1,1,2,3,4,2,3,4,5,6,7,1,2,8,9};
+            auto re = _(example).filter([](int i) { return i < 7; })
+                                .unique()
+                                .sort()
+                                .map([](int i) { return i * 2; })
+                                .values();
+            Assert().isEqual(re, {2, 4, 6, 8, 10, 12});
         });
 
     });

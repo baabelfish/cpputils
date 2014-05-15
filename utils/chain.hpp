@@ -15,9 +15,9 @@ inline static auto FUNC(Args... args) -> decltype(NAMESPACE::FUNC(std::forward<A
 }
 
 #define _ChainableUtilities(NAMESPACE, FUNC)\
-template<typename F>\
-inline Chain<T>& FUNC(F f) {\
-    m_fs.push_back([=](T v) { return std::move(NAMESPACE::FUNC(std::move(v), f)); });\
+template<typename... Args>\
+inline Chain<T>& FUNC(Args... args) {\
+    m_fs.push_back([=](T v) { return std::move(NAMESPACE::FUNC(std::move(v), args...)); });\
     return *this;\
 }
 
@@ -54,7 +54,7 @@ public:
         return *this;
     }
 
-    virtual T&& value() {
+    virtual T&& values() {
         run();
         return std::move(m_v);
     }
