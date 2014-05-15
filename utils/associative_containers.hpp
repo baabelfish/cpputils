@@ -1,8 +1,8 @@
 #pragma once
 
 // TODO:
-// mapValues
 // merge
+// pluck
 // omit
 
 #include "internal.hpp"
@@ -11,6 +11,26 @@
 #include <vector>
 
 namespace cu {
+
+template<typename C, typename K = typename C::key_type>
+inline C omit(C c, K key) {
+    auto it = c.find(key);
+    if (it != c.end()) {
+        c.erase(it);
+    }
+    return std::move(c);
+}
+
+template<typename C, typename K = typename C::key_type, typename... Args>
+inline C omit(C c, K key, Args... args) {
+    return std::move(omit(omit(c, key), std::forward<Args>(args)...));
+}
+
+template<typename C, typename F>
+inline C mapValues(C c, F f) {
+    for (auto& x : c) { x.second = f(x.second); }
+    return std::move(c);
+}
 
 template<typename KC, typename VC, typename K = typename KC::value_type, typename V = typename VC::value_type>
 std::unordered_map<K, V> zipUnorderedMap(KC kc, VC vc) { return internal::abstractZip<std::unordered_map<K, V>>(kc, vc); }

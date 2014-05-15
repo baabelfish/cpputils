@@ -17,6 +17,28 @@ yTestPackage AssociativeContainers([]{
             Assert().isEqual(mk, {1, 2})
                     .isEqual(mv, {"foo", "bar"});
         });
+
+        it("has omit", []{
+            std::map<int, std::string> m{
+                {1, "foo"},
+                {2, "bar"},
+                {3, "test"}
+            };
+            m = cu::omit(m, 2, 3);
+            Assert().isEqual(m.size(), 1);
+        });
+
+        it("has mapValues", []{
+            std::map<int, std::string> m{
+                {1, "foo"},
+                {2, "bar"},
+                {3, "test"}
+            };
+            m = cu::mapValues(m, [](std::string s) { return s + "_"; });
+            auto mv = cu::values(m);
+            Assert().isEqual(mv, {"foo_", "bar_", "test_"});
+        });
+
     });
 
     describe("zip", []{

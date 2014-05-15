@@ -15,7 +15,6 @@
 // lazyrange (with c++17)
 
 // sample
-// pluck (just use map?)
 // invoke
 
 namespace cu {
