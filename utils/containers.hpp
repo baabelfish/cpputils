@@ -1,6 +1,6 @@
 #pragma once
 
-#include <set>
+#include <unordered_set>
 #include <tuple>
 #include <algorithm>
 #include "internal.hpp"
@@ -57,8 +57,8 @@ inline std::vector<T> range(T start, Validator v, Generator g) {
 }
 
 template<typename R, typename C, typename F, typename T = typename C::value_type>
-inline std::map<R, std::vector<T>> groupBy(C c, F f) {
-    std::map<R, std::vector<T>> groups;
+inline std::unordered_map<R, std::vector<T>> groupBy(C c, F f) {
+    std::unordered_map<R, std::vector<T>> groups;
     for (auto& x : c) {
         groups[f(x)].push_back(x);
     }
@@ -66,8 +66,8 @@ inline std::map<R, std::vector<T>> groupBy(C c, F f) {
 }
 
 template<typename C, typename T = typename C::value_type>
-inline std::map<T, std::size_t> frequencies(C c) {
-    std::map<T, std::size_t> freqs;
+inline std::unordered_map<T, std::size_t> frequencies(C c) {
+    std::unordered_map<T, std::size_t> freqs;
     for (auto& x : c) {
         auto it = freqs.find(x);
         if (it == freqs.end()) { freqs[x] = 1; }
@@ -77,7 +77,7 @@ inline std::map<T, std::size_t> frequencies(C c) {
 }
 
 template<typename T>
-inline std::map<T, std::size_t> frequencies(std::initializer_list<T> c) {
+inline std::unordered_map<T, std::size_t> frequencies(std::initializer_list<T> c) {
     return frequencies<std::initializer_list<T>>(c);
 }
 
@@ -105,16 +105,9 @@ inline bool areEqual(C1 r1, C2 r2, F f) {
     return it1 == r1.end() && it2 == r2.end();
 }
 
-template<typename C1, typename C2>
+template<typename C1, typename C2, typename T1 = typename C1::value_type, typename T2 = typename C2::value_type>
 inline bool areEqual(C1 r1, C2 r2) {
-    auto it1 = r1.begin();
-    auto it2 = r2.begin();
-    while (it1 != r1.end() && it2 != r2.end()) {
-        if (*it1 != *it2) { return false; }
-        ++it1;
-        ++it2;
-    }
-    return it1 == r1.end() && it2 == r2.end();
+    return areEqual(r1, r2, [](const T1& a, const T2& b) { return a == b; });
 }
 
 template<typename T, typename Y, typename F>
@@ -129,15 +122,21 @@ inline bool areEqual(std::initializer_list<T> r1, std::initializer_list<Y> r2) {
 
 template<typename C, typename T = typename C::value_type>
 inline C unique(C c) {
-    C n;
-    std::set<T> uniq;
-    for (auto& x : c) {
-        if (uniq.find(x) == uniq.end()) {
-            n.push_back(x);
-            uniq.insert(x);
+    if (std::is_sorted(c.begin(), c.end())) {
+        auto lit = std::unique(c.begin(), c.end());
+        c.resize(std::distance(c.begin(), lit));
+        return c;
+    } else {
+        C n;
+        std::unordered_set<T> uniq;
+        for (auto& x : c) {
+            if (uniq.find(x) == uniq.end()) {
+                n.push_back(x);
+                uniq.insert(x);
+            }
         }
+        return n;
     }
-    return n;
 }
 
 template<typename T, typename... Args>

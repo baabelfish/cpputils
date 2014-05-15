@@ -78,39 +78,10 @@ yTestPackage chain([]{
         it("can do a real world example", []{
             std::vector<int> example{1,1,2,3,4,2,3,4,5,6,7,1,2,8,9};
             auto re = _(example).filter([](int i) { return i < 7; })
-                                .unique()
                                 .sort()
+                                .unique()
                                 .map([](int i) { return i * 2; });
             Assert().isEqual(re.values(), {2, 4, 6, 8, 10, 12});
-        });
-
-        it("performs ok", []{
-            std::vector<int> example;
-            for (std::size_t i = 0; i < 100000; ++i) { example.push_back(rand()); }
-            std::vector<int> answer1;
-            std::vector<int> answer2;
-
-            isFasterThan("", [=, &answer1]{
-                answer1 = _(example).filter([](int i) { return i < 7; })
-                                    .unique()
-                                    .sort()
-                                    .map([](int i) { return i * 2; })
-                                    .values();
-            },
-            [=, &answer2]{
-                std::set<int> uniq;
-                for (auto& x : example) {
-                    if (x < 7 && uniq.find(x) == uniq.end()) {
-                        answer2.push_back(x);
-                        uniq.insert(x);
-                    }
-                }
-                std::sort(answer2.begin(), answer2.end());
-                for (auto& x : answer2) { x *= 2; }
-            },
-            2);
-
-            Assert().isEqual(answer1, answer2);
         });
 
     });

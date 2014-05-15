@@ -36,7 +36,7 @@ inline cu::internal::Wrap<T, F> wrap(T t, F f) {
 inline void wait(std::size_t ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
 
 template<typename F, typename... Args>
-auto defer(F f, Args... args) -> decltype(std::async(std::launch::deferred, f)) {
+inline auto defer(F f, Args... args) -> decltype(std::async(std::launch::deferred, f)) {
     return std::async(std::launch::deferred, [](F f, Args... args) {
         f(std::forward<Args>(args)...);
     },
@@ -44,7 +44,7 @@ auto defer(F f, Args... args) -> decltype(std::async(std::launch::deferred, f)) 
 }
 
 template<typename F, typename... Args>
-auto delay(std::size_t ms, F f, Args... args) -> decltype(std::async(std::launch::async, f)) {
+inline auto delay(std::size_t ms, F f, Args... args) -> decltype(std::async(std::launch::async, f)) {
     return std::async(std::launch::async, [](std::size_t ms, F f, Args... args) {
         std::this_thread::sleep_for(std::chrono::milliseconds(ms));
         f(std::forward<Args>(args)...);
