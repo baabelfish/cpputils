@@ -25,6 +25,12 @@
 
 namespace cu {
 
+template<typename C>
+inline C sort(C c) {
+    std::sort(c.begin(), c.end());
+    return std::move(c);
+}
+
 template<typename C1, typename C2, typename T1 = typename C1::value_type, typename T2 = typename C2::value_type, typename F>
 inline bool areEqual(C1 r1, C2 r2, F f) {
     auto it1 = r1.begin();
