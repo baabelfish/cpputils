@@ -29,6 +29,15 @@ yTestPackage function_module([]{
                     .isEqual(ui4, L"bar_3");
         });
 
+        it("has delay", []{
+            int test = 0;
+            {
+                auto hadle = cu::delay(100, [&]() { test = 2; });
+                test = 1;
+            }
+            Assert().isFalse(2);
+        });
+
         it("has identity", []{
             Assert().isEqual(cu::identity(5), 5)
                     .isEqual(cu::identity(5, 10, 2), 5);

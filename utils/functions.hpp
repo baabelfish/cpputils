@@ -11,11 +11,11 @@
 // throttle
 // wrap
 
-// uniqueId
-
+#include <thread>
 #include <functional>
 #include <iostream>
 #include <string>
+#include <future>
 #include "internal.hpp"
 
 namespace cu {
@@ -36,6 +36,15 @@ public:
         if (++m_calls == m_amount) { m_f(); }
     }
 };
+
+template<typename F, typename... Args>
+auto delay(std::size_t ms, F f, Args... args) -> decltype(std::async(std::launch::async, f)) {
+    auto handle = std::async(std::launch::async, [](std::size_t ms, F f, Args... args) {
+        std::this_thread::sleep_for(std::chrono::milliseconds(ms));
+        f(std::forward<Args>(args)...);
+    }, ms, f, std::forward<Args>(args)...);
+    return handle;
+}
 
 template<typename T, typename... Args>
 inline T identity(T v, Args...) {
