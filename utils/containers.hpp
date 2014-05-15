@@ -7,13 +7,12 @@
 
 // TODO:
 // without
-// zip
-// zipObject
 // frequencies
 // range
 // union
 // difference
 // intersection
+// zip
 
 // groupBy
 // max
@@ -26,8 +25,42 @@
 
 namespace cu {
 
+template<typename C1, typename C2, typename T1 = typename C1::value_type, typename T2 = typename C2::value_type, typename F>
+inline bool areEqual(C1 r1, C2 r2, F f) {
+    auto it1 = r1.begin();
+    auto it2 = r2.begin();
+    while (it1 != r1.end() && it2 != r2.end()) {
+        if (!f(*it1, *it2)) { return false; }
+        ++it1;
+        ++it2;
+    }
+    return it1 == r1.end() && it2 == r2.end();
+}
+
+template<typename C1, typename C2>
+inline bool areEqual(C1 r1, C2 r2) {
+    auto it1 = r1.begin();
+    auto it2 = r2.begin();
+    while (it1 != r1.end() && it2 != r2.end()) {
+        if (*it1 != *it2) { return false; }
+        ++it1;
+        ++it2;
+    }
+    return it1 == r1.end() && it2 == r2.end();
+}
+
+template<typename T, typename Y, typename F>
+inline bool areEqual(std::initializer_list<T> r1, std::initializer_list<Y> r2, F f) {
+    return areEqual<std::initializer_list<T>, std::initializer_list<Y>>(r1, r2, f);
+}
+
+template<typename T, typename Y>
+inline bool areEqual(std::initializer_list<T> r1, std::initializer_list<Y> r2) {
+    return areEqual<std::initializer_list<T>, std::initializer_list<Y>>(r1, r2);
+}
+
 template<typename C, typename T = typename C::value_type>
-C unique(C c) {
+inline C unique(C c) {
     C n;
     std::set<T> uniq;
     for (auto& x : c) {
@@ -40,12 +73,12 @@ C unique(C c) {
 }
 
 template<typename T, typename... Args>
-bool contains(T t, Args... args) {
+inline bool contains(T t, Args... args) {
     return internal::contains(t, std::forward<Args>(args)...);
 }
 
 template<typename C, typename T = typename C::value_type, typename F>
-typename C::const_reverse_iterator findLast(const C& c, F f) {
+inline typename C::const_reverse_iterator findLast(const C& c, F f) {
     for (auto it = c.rbegin(); it != c.rend(); ++it) {
         if (f(*it)) { return it; }
     }
@@ -53,7 +86,7 @@ typename C::const_reverse_iterator findLast(const C& c, F f) {
 }
 
 template<typename C, typename T = typename C::value_type, typename F>
-typename C::const_iterator find(const C& c, F f) {
+inline typename C::const_iterator find(const C& c, F f) {
     for (auto it = c.begin(); it != c.end(); ++it) {
         if (f(*it)) { return it; }
     }
@@ -61,7 +94,7 @@ typename C::const_iterator find(const C& c, F f) {
 }
 
 template<typename C, typename... Args>
-C at(C c, Args... args) {
+inline C at(C c, Args... args) {
     C n;
     internal::at(n, c, std::forward<Args>(args)...);
     return n;

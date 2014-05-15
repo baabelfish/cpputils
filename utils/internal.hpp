@@ -13,6 +13,19 @@
 namespace cu {
 namespace internal {
 
+template<typename R, typename KC, typename VC, typename K = typename KC::value_type, typename V = typename VC::value_type>
+R abstractZip(KC kc, VC vc) {
+    R m;
+    auto kit = kc.begin();
+    auto vit = vc.begin();
+    while (kit != kc.end() && vit != vc.end()) {
+        m.insert(std::pair<K, V>(*kit, *vit));
+        ++kit;
+        ++vit;
+    }
+    return m;
+}
+
 namespace aux {
 
 class Uniquable {

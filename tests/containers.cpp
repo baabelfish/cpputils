@@ -63,6 +63,20 @@ yTestPackage containers([]{
             Assert().isEqual(x, {2,4,6,8});
         });
 
+        it("can test equality of ranges", [=]{
+            Assert().isTrue(cu::areEqual(std::vector<int>{1,2,3}, std::vector<int>{1,2,3}))
+                    .isTrue(cu::areEqual(std::vector<int>{}, std::vector<int>{}))
+                    .isTrue(cu::areEqual({1}, {1}))
+                    .isFalse(cu::areEqual(std::vector<int>{1,2,3}, std::vector<int>{1,2,3,4}))
+                    .isFalse(cu::areEqual(std::vector<int>{1,3,3}, std::vector<int>{1,2,3}));
+        });
+
+        it("can test equality of ranges with custom a function", [=]{
+            Assert().isTrue(cu::areEqual({1}, {"1"}, [](int a, std::string b) {
+                return std::to_string(a) == b;
+            }));
+        });
+
         it("can filter", [=]{
             auto nx = cu::filter(x, [](int i) { return i > 2; });
             Assert().isEqual(nx, {3, 4});
