@@ -4,10 +4,10 @@
 #include <tuple>
 #include <algorithm>
 #include "internal.hpp"
+#include "datastructures/minmax.hpp"
 
 // TODO:
 // without
-// range
 // union
 // difference
 // intersection
@@ -15,15 +15,28 @@
 // lazyrange (with c++17)
 
 // groupBy
-// max
-// min
-// minmax
 // reject
 // sample
 // pluck (just use map?)
 // invoke
 
 namespace cu {
+
+template<typename C, typename T = typename C::value_type>
+inline T min(C c) {
+    return *std::min_element(c.begin(), c.end());
+}
+
+template<typename C, typename T = typename C::value_type>
+inline T max(C c) {
+    return *std::max_element(c.begin(), c.end());
+}
+
+template<typename C, typename T = typename C::value_type>
+inline ds::MinMax<T> minmax(C c) {
+    auto res = std::minmax_element(c.begin(), c.end());
+    return { *res.first, *res.second };
+}
 
 template<typename T>
 inline std::vector<T> range(T start, T stop, T step = 1) {

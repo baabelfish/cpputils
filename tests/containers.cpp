@@ -13,6 +13,17 @@ yTestPackage containers([]{
     describe("container module", []{
         std::vector<int> x{1,2,3,4};
 
+        it("can find min and max elements", []{
+            std::vector<int> x{1,2,3,4,3,0,2};
+            auto minmax = cu::minmax(x);
+            auto min = cu::min(x),
+                 max = cu::max(x);
+            Assert().isEqual(minmax.min, 0);
+            Assert().isEqual(minmax.max, 4);
+            Assert().isEqual(min, 0);
+            Assert().isEqual(max, 4);
+        });
+
         it("can construct a range", []{
             Assert().isEqual(cu::range(0, 10), {0,1,2,3,4,5,6,7,8,9});
         });
