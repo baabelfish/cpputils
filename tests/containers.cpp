@@ -37,6 +37,11 @@ yTestPackage containers([]{
             Assert().isEqual(*cu::findLast(x, [](int i) { return i > 2; }), 4);
         });
 
+        it("has unique", []{
+            std::vector<int> x{1,3,5,2,3,2,4};
+            Assert().isEqual(cu::unique(x), {1,3,5,2,4});
+        });
+
         it("has contains", []{
             Assert().isTrue(cu::contains("foobar", "foo"))
                     .isTrue(cu::contains(L"foobar", L"foo"))

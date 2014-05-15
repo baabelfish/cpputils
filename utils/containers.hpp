@@ -1,11 +1,10 @@
 #pragma once
 
+#include <set>
 #include <algorithm>
 #include "internal.hpp"
 
 // TODO:
-// indexOf
-// uniq
 // without
 // zip
 // zipObject
@@ -25,6 +24,19 @@
 // invoke
 
 namespace cu {
+
+template<typename C, typename T = typename C::value_type>
+C unique(C c) {
+    C n;
+    std::set<T> uniq;
+    for (auto& x : c) {
+        if (uniq.find(x) == uniq.end()) {
+            n.push_back(x);
+            uniq.insert(x);
+        }
+    }
+    return n;
+}
 
 template<typename T, typename... Args>
 bool contains(T t, Args... args) {
