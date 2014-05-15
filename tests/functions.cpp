@@ -31,6 +31,14 @@ yTestPackage function_module([]{
 
         it("has wait", []{ cu::wait(10); });
 
+        it("has once", []{
+            auto f = cu::once([](int a, int b) { return a + b; });
+            auto v1 = f(8, 5),
+                 v2 = f(10, 5);
+            Assert().isEqual(v1, 13);
+            Assert().isEqual(v1, v2);
+        });
+
         it("has wrap", []{
             auto f = cu::wrap(15, [](int a, int b) { return a + b; });
             auto v = f(8);

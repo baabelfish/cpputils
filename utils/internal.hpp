@@ -1,5 +1,6 @@
 #pragma once
 
+#include <vector>
 #include <mutex>
 #include <iostream>
 #include <functional>
@@ -11,6 +12,36 @@
 
 namespace cu {
 namespace internal {
+
+template<class F>
+class Once {
+    bool executed;
+    std::size_t at;
+    F f;
+
+public:
+    Once(F f):
+        executed(false),
+        at(0),
+        f(f) {}
+
+
+    virtual ~Once() {}
+
+    template<typename... Args>
+    auto operator()(Args... args) -> decltype(f(std::forward<Args>(args)...)) {
+        static std::mutex m;
+        static std::vector<decltype(f(std::forward<Args>(args)...))> Revals;
+
+        if (!executed) {
+            std::lock_guard<std::mutex> l(m);
+            executed = true;
+            at = Revals.size();
+            Revals.push_back(f(std::forward<Args>(args)...));
+        }
+        return Revals[at];
+    }
+};
 
 template<typename T, typename F>
 class Wrap {

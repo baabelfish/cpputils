@@ -6,11 +6,11 @@
 // once
 // partial
 // throttle
-// wrap
 // compose (just use lambdas?)
 
+#include <vector>
+#include <mutex>
 #include <thread>
-#include <tuple>
 #include <functional>
 #include <iostream>
 #include <string>
@@ -23,7 +23,6 @@ class after {
     std::function<void()> m_f;
     std::size_t m_calls = 0;
     std::size_t m_amount;
-
 public:
     after(std::size_t amount, std::function<void()> f):
         m_f(f),
@@ -35,6 +34,9 @@ public:
         if (++m_calls == m_amount) { m_f(); }
     }
 };
+
+template<typename F>
+internal::Once<F> once(F f) { return internal::Once<F>(f); }
 
 template<typename T, typename F>
 inline internal::Wrap<T, F> wrap(T t, F f) { return internal::Wrap<T, F>(t, f); }
