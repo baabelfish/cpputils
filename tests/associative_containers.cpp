@@ -18,6 +18,21 @@ yTestPackage AssociativeContainers([]{
                     .isEqual(mv, {"foo", "bar"});
         });
 
+        it("has merge", []{
+            std::map<int, std::string> a{
+                {1, "foo"},
+                {2, "bar"},
+                {3, "test"}
+            };
+            std::map<int, std::string> b{
+                {2, "x"},
+                {4, "something else"}
+            };
+            a = cu::merge(a, b);
+            Assert().isEqual(a.size(), 4);
+            Assert().isEqual(cu::values(a), {"foo", "x", "test", "something else"});
+        });
+
         it("has omit", []{
             std::map<int, std::string> m{
                 {1, "foo"},
