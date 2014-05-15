@@ -4,9 +4,35 @@
 #include <map>
 #include <string>
 
-yTestPackage functions([]{
+yTestPackage function_module([]{
     describe("function module", []{
         std::vector<int> x{1,2,3,4};
+
+        it("has times", []{
+            int x = 0;
+            cu::times(5, [&]() { x += 1; });
+            Assert().isEqual(x, 5);
+
+            x = 0;
+            cu::times(5, [&](int y) { x += y; }, 2);
+            Assert().isEqual(x, 10);
+        });
+
+        it("has uniqueId", []{
+            auto ui = cu::uniqueId(),
+                 ui2 = cu::uniqueId();
+            auto ui3 = cu::uniqueId("foo_");
+            auto ui4 = cu::uniqueId(L"bar_");
+            Assert().isEqual(ui, 0)
+                    .isEqual(ui2, 1)
+                    .isEqual(ui3, "foo_2")
+                    .isEqual(ui4, L"bar_3");
+        });
+
+        it("has identity", []{
+            Assert().isEqual(cu::identity(5), 5)
+                    .isEqual(cu::identity(5, 10, 2), 5);
+        });
 
         it("can tap", []{
             int x = 5;

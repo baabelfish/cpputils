@@ -1,5 +1,6 @@
 #pragma once
 
+#include <mutex>
 #include <iostream>
 #include <functional>
 #include <map>
@@ -47,6 +48,13 @@ bool contains(const C& c, T t) {
 template<typename T, typename Y, typename... Args>
 bool contains(T s, Y t, Args... args) {
     return contains(s, t) || contains(s, std::forward<Args>(args)...);
+}
+
+inline std::size_t uniqueId() {
+    static std::mutex m;
+    static std::size_t id = 0;
+    std::lock_guard<std::mutex> l(m);
+    return id++;
 }
 
 } // namespace internal
