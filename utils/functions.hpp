@@ -16,21 +16,21 @@
 #include <future>
 #include "internal.hpp"
 
-namespace cu {
+namespace cf {
 
 template<typename F, typename... Args>
-inline internal::After<F, Args...> after(std::size_t amount, F f, Args... args) {
-    return std::move(internal::After<F, Args...>(amount, f, std::forward<Args>(args)...));
+inline cu::internal::After<F, Args...> after(std::size_t amount, F f, Args... args) {
+    return std::move(cu::internal::After<F, Args...>(amount, f, std::forward<Args>(args)...));
 }
 
 template<typename F>
-inline internal::Once<F> once(F f) {
-    return std::move(internal::Once<F>(f));
+inline cu::internal::Once<F> once(F f) {
+    return std::move(cu::internal::Once<F>(f));
 }
 
 template<typename T, typename F>
-inline internal::Wrap<T, F> wrap(T t, F f) {
-    return std::move(internal::Wrap<T, F>(t, f));
+inline cu::internal::Wrap<T, F> wrap(T t, F f) {
+    return std::move(cu::internal::Wrap<T, F>(t, f));
 }
 
 inline void wait(std::size_t ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
@@ -56,9 +56,9 @@ inline T identity(T v, Args...) {
     return std::move(v);
 }
 
-inline std::string uniqueId(std::string prefix) { return prefix + std::to_string(internal::uniqueId()); }
-inline std::wstring uniqueId(std::wstring prefix) { return prefix + std::to_wstring(internal::uniqueId()); }
-inline std::size_t uniqueId() { return internal::uniqueId(); }
+inline std::string uniqueId(std::string prefix) { return prefix + std::to_string(cu::internal::uniqueId()); }
+inline std::wstring uniqueId(std::wstring prefix) { return prefix + std::to_wstring(cu::internal::uniqueId()); }
+inline std::size_t uniqueId() { return cu::internal::uniqueId(); }
 
 template<typename F, typename... Args>
 inline void times(std::size_t amount, F f, Args... args) {

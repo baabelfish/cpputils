@@ -8,18 +8,24 @@
 
 // FIXME: Remove these macros. Some day...
 
-#define _ChainableUtilities(FUNC)\
+#define _StaticUtilities(NAMESPACE, FUNC)\
+template<typename... Args>\
+static auto FUNC(Args... args) -> decltype(NAMESPACE::FUNC(std::forward<Args>(args)...)) {\
+    return NAMESPACE::FUNC(std::forward<Args>(args)...);\
+}
+
+#define _ChainableUtilities(NAMESPACE, FUNC)\
 template<typename F>\
 Chain<T>& FUNC(F f) {\
-    m_fs.push_back([=](T v) { return std::move(cu::FUNC(std::move(v), f)); });\
+    m_fs.push_back([=](T v) { return std::move(NAMESPACE::FUNC(std::move(v), f)); });\
     return *this;\
 }
 
-#define _ReturningUtilities(FUNC)\
+#define _ReturningUtilities(NAMESPACE, FUNC)\
 template<typename... Args>\
-auto FUNC(Args... args) -> decltype(cu::FUNC(m_v, std::forward<Args>(args)...)) {\
+auto FUNC(Args... args) -> decltype(NAMESPACE::FUNC(m_v, std::forward<Args>(args)...)) {\
     run();\
-    return cu::FUNC(m_v, std::forward<Args>(args)...);\
+    return NAMESPACE::FUNC(m_v, std::forward<Args>(args)...);\
 }
 
 
@@ -53,35 +59,43 @@ public:
         return std::move(m_v);
     }
 
-    _ChainableUtilities(map)
-    _ChainableUtilities(filter)
-    _ChainableUtilities(reject)
-    _ChainableUtilities(sort)
-    _ChainableUtilities(at)
-    _ChainableUtilities(unique)
-    _ChainableUtilities(tap)
-    _ChainableUtilities(listen)
-    _ChainableUtilities(pipe)
+    _StaticUtilities(cf, delay)
+    _StaticUtilities(cf, after)
+    _StaticUtilities(cf, once)
+    _StaticUtilities(cf, wrap)
+    _StaticUtilities(cf, wait)
+    _StaticUtilities(cf, defer)
+    _StaticUtilities(cf, uniqueId)
 
-    _ReturningUtilities(groupBy)
-    _ReturningUtilities(frequencies)
-    _ReturningUtilities(fold)
-    _ReturningUtilities(rfold)
+    _ChainableUtilities(cf, listen)
+    _ChainableUtilities(cf, pipe)
+    _ChainableUtilities(cf, tap)
+    _ChainableUtilities(cu, at)
+    _ChainableUtilities(cu, filter)
+    _ChainableUtilities(cu, map)
+    _ChainableUtilities(cu, reject)
+    _ChainableUtilities(cu, sort)
+    _ChainableUtilities(cu, unique)
 
-    _ReturningUtilities(all)
-    _ReturningUtilities(any)
-    _ReturningUtilities(none)
-    _ReturningUtilities(areEqual)
-    _ReturningUtilities(contains)
+    _ReturningUtilities(cu, fold)
+    _ReturningUtilities(cu, frequencies)
+    _ReturningUtilities(cu, groupBy)
+    _ReturningUtilities(cu, rfold)
 
-    _ReturningUtilities(size)
-    _ReturningUtilities(min)
-    _ReturningUtilities(max)
-    _ReturningUtilities(minmax)
-    _ReturningUtilities(find)
-    _ReturningUtilities(findLast)
-    _ReturningUtilities(first)
-    _ReturningUtilities(last)
+    _ReturningUtilities(cu, all)
+    _ReturningUtilities(cu, any)
+    _ReturningUtilities(cu, areEqual)
+    _ReturningUtilities(cu, contains)
+    _ReturningUtilities(cu, none)
+
+    _ReturningUtilities(cu, find)
+    _ReturningUtilities(cu, findLast)
+    _ReturningUtilities(cu, first)
+    _ReturningUtilities(cu, last)
+    _ReturningUtilities(cu, max)
+    _ReturningUtilities(cu, min)
+    _ReturningUtilities(cu, minmax)
+    _ReturningUtilities(cu, size)
 };
 
 } // namespace cu
