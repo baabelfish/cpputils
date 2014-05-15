@@ -25,6 +25,12 @@
 
 namespace cu {
 
+template<typename C, typename F>
+inline C sort(C c, F f) {
+    std::sort(c.begin(), c.end(), f);
+    return std::move(c);
+}
+
 template<typename C>
 inline C sort(C c) {
     std::sort(c.begin(), c.end());

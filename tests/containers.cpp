@@ -17,6 +17,10 @@ yTestPackage containers([]{
             Assert().isEqual(cu::sort(std::vector<int>{1,4,2,3}), {1,2,3,4});
         });
 
+        it("can sort with a function", []{
+            Assert().isEqual(cu::sort(std::vector<int>{1,4,2,3}, [](int a, int b) { return a > b; }), {4,3,2,1});
+        });
+
         it("inplace map", [=]{
             auto nx = cu::map(x, [](int x) { return x * 2; });
             Assert().isEqual(nx, {2,4,6,8});
