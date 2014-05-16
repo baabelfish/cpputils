@@ -13,22 +13,24 @@ namespace cu {
 template<typename C, typename K = typename C::key_type>
 inline C omit(C c, K key) {
     auto it = c.find(key);
-    if (it != c.end()) {
-        c.erase(it);
-    }
+    if (it != c.end()) { c.erase(it); }
     return std::move(c);
 }
 
 template<typename C, typename K = typename C::key_type, typename... Args>
 inline C omit(C c, K key, Args... args) {
-    return std::move(omit(omit(c, key), std::forward<Args>(args)...));
+    return std::move(omit(std::move(omit(c, key)), std::forward<Args>(args)...));
 }
 
 template<typename C, typename CO, typename K = typename C::value_type, typename V = typename C::value_type>
 inline C merge(C c, CO co) {
-    for (auto& x : co) {
-        c[x.first] = x.second;
-    }
+    for (auto& x : co) { c.insert(x); }
+    return std::move(c);
+}
+
+template<typename C, typename K = typename C::value_type, typename V = typename C::value_type>
+inline C merge(C c, std::map<K, V> co) {
+    for (auto& x : co) { c[x.first] = x.second; }
     return std::move(c);
 }
 

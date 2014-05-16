@@ -28,6 +28,7 @@ yTestPackage AssociativeContainers([]{
                 {2, "x"},
                 {4, "something else"}
             };
+
             a = cu::merge(a, b);
             Assert().isEqual(a.size(), 4);
             Assert().isEqual(cu::values(a), {"foo", "x", "test", "something else"});
@@ -41,6 +42,7 @@ yTestPackage AssociativeContainers([]{
             };
             m = cu::omit(m, 2, 3);
             Assert().isEqual(m.size(), 1);
+            Assert().isNotEqual(m.find(1), m.end());
         });
 
         it("has mapValues", []{
