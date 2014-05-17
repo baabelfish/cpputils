@@ -71,6 +71,11 @@ isSame
 nth
 ```
 
+- Other:
+```
+function_traits
+```
+
 
 # Usage
 - This is a header-only library so including `cu.hpp` is enough:
@@ -83,10 +88,12 @@ nth
  you can construct chains with `_`-function that constructs `Chain`-objects:
 
 ```cpp
-auto chain = _({1,2,3,4}).map([](int i) { return i * 2; })
+auto chain = _({1,2,3,4}).reject([](int i) { return i < 2; })
                          .reverse()
-                         .values();
-assert(chain == {8,6,4,2});
+                         .concat(std::list<int>{1,2})
+                         .map([](int i) { return i * 2; })
+                         .concat(std::vector<int>{3});
+Assert().isEqual(chain.values(), {8,6,4,2,4,3});
 ```
 
 # Documentation

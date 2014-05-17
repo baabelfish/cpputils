@@ -41,11 +41,17 @@ inline std::forward_list<T> prepend(std::forward_list<T> c, CF other, Containers
 
 template<typename C>
 inline C concat(C c) { return std::move(c); }
+
 template<typename C, typename T = typename C::value_type, typename CF, typename... Containers>
 inline C concat(C c, CF other, Containers... rest) {
     c.resize(c.size() + other.size());
     std::move_backward(other.begin(), other.end(), c.end());
     return concat(std::move(c), std::forward<Containers>(rest)...);
+}
+
+template<typename C, typename T = typename C::value_type, typename... Containers>
+inline C concat(C c, std::initializer_list<T> il, Containers... rest) {
+    return concat(std::move(c), il, std::forward<Containers>(rest)...);
 }
 
 template<typename C, typename T = typename C::value_type>
