@@ -1,8 +1,11 @@
 #pragma once
 
+#include <set>
 #include <forward_list>
 #include <unordered_set>
 #include <tuple>
+#include <list>
+#include <deque>
 #include <algorithm>
 #include "internal.hpp"
 #include "datastructures/minmax.hpp"
@@ -18,7 +21,53 @@
 // sample
 // invoke
 
+#define __ContainerConstructorHelper(NAME,TYPE)\
+template<typename T, typename... Args>\
+inline std::TYPE<T> NAME(T t, Args... args) { return std::TYPE<T>{t, args...}; }
+
+#define __ContainerConvertHelperSet(NAME,TYPE)\
+template<typename C, typename T = typename C::value_type>\
+inline std::TYPE<T> NAME(C c) {\
+    std::TYPE<T> n;\
+    n.insert(std::make_move_iterator(c.begin()), std::make_move_iterator(c.end()));\
+    return n;\
+}
+
+#define __ContainerConvertHelper(NAME,TYPE)\
+template<typename C, typename T = typename C::value_type>\
+inline std::TYPE<T> NAME(C c) {\
+    std::TYPE<T> n;\
+    n.insert(n.begin(), std::make_move_iterator(c.begin()), std::make_move_iterator(c.end()));\
+    return n;\
+}
+
 namespace cu {
+
+__ContainerConstructorHelper(set,set)
+__ContainerConstructorHelper(multiset,multiset)
+__ContainerConstructorHelper(uset,unordered_set)
+__ContainerConstructorHelper(multiuset,unordered_multiset)
+__ContainerConstructorHelper(flist,forward_list)
+__ContainerConstructorHelper(list,list)
+__ContainerConstructorHelper(deque,deque)
+__ContainerConstructorHelper(vec,vector)
+
+__ContainerConvertHelperSet(set,set)
+__ContainerConvertHelperSet(multiset,multiset)
+__ContainerConvertHelperSet(uset,unordered_set)
+__ContainerConvertHelperSet(multiuset,unordered_multiset)
+
+__ContainerConvertHelper(list,list)
+__ContainerConvertHelper(deque,deque)
+__ContainerConvertHelper(vec,vector)
+
+template<typename C, typename T = typename C::value_type>
+inline std::forward_list<T> flist(C c) {
+    std::forward_list<T> n;
+    n.insert_after(n.before_begin(), std::make_move_iterator(c.begin()), std::make_move_iterator(c.end()));
+    return n;
+}
+
 
 template<typename C>
 inline C reverse(C c) {
@@ -47,11 +96,6 @@ inline C concat(C c, CF other, Containers... rest) {
     c.resize(c.size() + other.size());
     std::move_backward(other.begin(), other.end(), c.end());
     return concat(std::move(c), std::forward<Containers>(rest)...);
-}
-
-template<typename C, typename T = typename C::value_type, typename... Containers>
-inline C concat(C c, std::initializer_list<T> il, Containers... rest) {
-    return concat(std::move(c), il, std::forward<Containers>(rest)...);
 }
 
 template<typename C, typename T = typename C::value_type>

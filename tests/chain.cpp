@@ -7,6 +7,13 @@ yTestPackage chain([]{
     describe("chaining module", []{
         std::vector<int> X{1,2,3};
 
+        it("can construct containers", []{
+            std::forward_list<int> flist = cu::flist(1,2,3);
+            std::list<int> list = cu::list(1,2,3);
+            std::vector<int> vec = cu::vec(1,2,3);
+            std::deque<int> deque = cu::deque(1,2,3);
+        });
+
         it("can construct chains", []{
             auto chain = _({1,2,3});
             auto chain2 = _(std::forward_list<int>{1,2,3});
@@ -90,9 +97,9 @@ yTestPackage chain([]{
         it("works with README.md example", [=]{
             auto chain = _({1,2,3,4}).reject([](int i) { return i < 2; })
                                      .reverse()
-                                     .concat(std::list<int>{1,2})
+                                     .concat(cu::vec(1,2))
                                      .map([](int i) { return i * 2; })
-                                     .concat(std::vector<int>{3});
+                                     .concat(cu::vec(3));
             Assert().isEqual(chain.values(), { 8, 6, 4, 2, 4, 3 });
             Assert().isTrue(chain.contains(8, 6, 3));
         });

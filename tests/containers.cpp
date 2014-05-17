@@ -17,6 +17,24 @@ yTestPackage containers([]{
     describe("container module", []{
         std::vector<int> x{1,2,3,4};
 
+        it("can initialize containers", []{
+            Assert().isEqual(std::set<int>{1,2,3}, cu::set(1,2,3));
+            Assert().isEqual(std::multiset<int>{1,2,3}, cu::multiset(1,2,3));
+            Assert().isEqual(std::unordered_set<int>{1,2,3}, cu::uset(1,2,3));
+            Assert().isEqual(std::unordered_multiset<int>{1,2,3}, cu::multiuset(1,2,3));
+            Assert().isEqual(std::forward_list<int>{1,2,3}, cu::flist(1,2,3));
+            Assert().isEqual(std::list<int>{1,2,3}, cu::list(1,2,3));
+            Assert().isEqual(std::deque<int>{1,2,3}, cu::deque(1,2,3));
+            Assert().isEqual(std::vector<int>{1,2,3}, cu::vec(1,2,3));
+        });
+
+        it("can convert containers", []{
+            Assert().isEqual(std::unordered_set<int>{1,2,3}, cu::uset(std::vector<int>{1,2,3}));
+            Assert().isEqual(std::forward_list<int>{1,2,3}, cu::flist(std::vector<int>{1,2,3}));
+            Assert().isEqual(cu::flist(std::vector<int>{1,2,3}), std::forward_list<int>{1,2,3});
+            Assert().isEqual(std::vector<int>{1,2,3}, cu::vec(std::list<int>{1,2,3}));
+        });
+
         it("has prepend", []{
             std::deque<int> x{1,2};
             std::list<int> y{3,4};
@@ -34,8 +52,9 @@ yTestPackage containers([]{
         it("has concat", []{
             std::vector<int> x{1,2};
             std::list<int> y{3,4};
-            auto z = cu::concat(x, y);
-            Assert().isEqual(z, {1,2,3,4});
+            std::deque<int> z{5,6};
+            auto w = cu::concat(x, y, z);
+            Assert().isEqual(w, {1,2,3,4,5,6});
         });
 
         it("has reverse", []{
