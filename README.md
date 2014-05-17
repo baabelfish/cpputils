@@ -80,7 +80,7 @@ nth
 ```
 
 - You can use the functions directly under `cu` and `cf` -namespaces or
- you can construct chains with `_`-function that constructs `Chain`-classes:
+ you can construct chains with `_`-function that constructs `Chain`-objects:
 
 ```cpp
 auto chain = _({1,2,3,4}).map([](int i) { return i * 2; })

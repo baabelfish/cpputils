@@ -5,9 +5,15 @@ yTestPackage chain([]{
     describe("chaining module", []{
         std::vector<int> X{1,2,3};
 
-        it("works with initializer_list", []{
+        it("can construct chains", []{
             auto chain = _({1,2,3});
+            auto chain2 = _(std::forward_list<int>{1,2,3});
+            auto chain3 = _(std::set<int>{1,2,3});
+            auto chain4 = _(std::map<int, int>{{1,2}, {3,4}});
             Assert().isEqual(chain.values(), {1,2,3});
+            Assert().isEqual(chain2.values(), {1,2,3});
+            Assert().isEqual(chain3.values(), {1,2,3});
+            Assert().isEqual(chain4.values(), {{1,2}, {3,4}});
         });
 
         it("can copy", [=]{
