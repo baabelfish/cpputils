@@ -5,9 +5,9 @@ yTestPackage chain([]{
     describe("chaining module", []{
         std::vector<int> X{1,2,3};
 
-        it("can return endval", []{
-            // auto l = _(5);
-            // Assert().isEqual(l.values(), 5);
+        it("works with initializer_list", []{
+            auto chain = _({1,2,3});
+            Assert().isEqual(chain.values(), {1,2,3});
         });
 
         it("can copy", [=]{

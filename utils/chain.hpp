@@ -16,8 +16,8 @@ inline static auto FUNC(Args... args) -> decltype(NAMESPACE::FUNC(std::forward<A
 
 #define _ChainableUtilities(NAMESPACE, FUNC)\
 template<typename... Args>\
-inline Chain<T>& FUNC(Args... args) {\
-    m_fs.push_back([=](T v) { return std::move(NAMESPACE::FUNC(std::move(v), args...)); });\
+inline Chain<C>& FUNC(Args... args) {\
+    m_fs.push_back([=](C v) { return std::move(NAMESPACE::FUNC(std::move(v), args...)); });\
     return *this;\
 }
 
@@ -31,29 +31,29 @@ inline auto FUNC(Args... args) -> decltype(NAMESPACE::FUNC(m_v, std::forward<Arg
 
 namespace cu {
 
-template<class T>
+template<class C, typename T = typename C::value_type>
 class Chain {
-    typedef std::function<T(T v)> FunctionType;
+    typedef std::function<C(C v)> FunctionType;
     std::vector<FunctionType> m_fs;
-    T m_v;
+    C m_v;
 
     void run() {
         for (auto& x : m_fs) { m_v = std::move(x(std::move(m_v))); }
     }
 
 public:
-    Chain(T v):
+    Chain(C v):
         m_fs(),
         m_v(std::move(v)) {}
     virtual ~Chain() {}
-    virtual Chain<T> copy() const { return *this; }
+    virtual Chain<C> copy() const { return *this; }
 
-    Chain<T>& custom(FunctionType f) {
+    Chain<C>& custom(FunctionType f) {
         m_fs.push_back(f);
         return *this;
     }
 
-    virtual T&& values() {
+    virtual C&& values() {
         run();
         return std::move(m_v);
     }
@@ -102,12 +102,8 @@ public:
 
 } // namespace cu
 
-template<typename T>
-cu::Chain<T> _() {
-    return cu::Chain<T>();
-}
+template<typename C>
+cu::Chain<C> _(C v) { return std::move(cu::Chain<C>(std::move(v))); }
 
 template<typename T>
-cu::Chain<T> _(T v) {
-    return cu::Chain<T>(v);
-}
+cu::Chain<std::vector<T>> _(std::initializer_list<T> v) { return std::move(_(std::vector<T>(v))); }
