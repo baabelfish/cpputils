@@ -289,7 +289,7 @@ template<typename C, typename F>
 inline C filter(C c, F f) {
     C n;
     for (auto& x : c) {
-        if (f(x)) { n.push_back(x); }
+        if (f(x)) { n.insert(n.end(), x); }
     }
     return std::move(n);
 }
@@ -298,7 +298,7 @@ template<typename C, typename F>
 inline C reject(C c, F f) {
     C n;
     for (auto& x : c) {
-        if (!f(x)) { n.push_back(x); }
+        if (!f(x)) { n.insert(n.end(), x); }
     }
     return std::move(n);
 }
