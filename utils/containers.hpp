@@ -1,5 +1,6 @@
 #pragma once
 
+#include <forward_list>
 #include <unordered_set>
 #include <tuple>
 #include <algorithm>
@@ -8,6 +9,7 @@
 
 // TODO:
 // without
+// reverse
 // union
 // difference
 // intersection
@@ -18,6 +20,28 @@
 // invoke
 
 namespace cu {
+
+template<typename C>
+inline C prepend(C c) { return std::move(c); }
+template<typename C, typename T = typename C::value_type, typename CF, typename... Containers>
+inline C prepend(C c, CF other, Containers... rest) {
+    c.insert(c.begin(), std::make_move_iterator(other.begin()), std::make_move_iterator(other.end()));
+    return prepend(std::move(c), std::forward<Containers>(rest)...);
+}
+template<typename T, typename CF, typename... Containers>
+inline std::forward_list<T> prepend(std::forward_list<T> c, CF other, Containers... rest) {
+    c.insert_after(c.before_begin(), std::make_move_iterator(other.begin()), std::make_move_iterator(other.end()));
+    return prepend(std::move(c), std::forward<Containers>(rest)...);
+}
+
+template<typename C>
+inline C concat(C c) { return std::move(c); }
+template<typename C, typename T = typename C::value_type, typename CF, typename... Containers>
+inline C concat(C c, CF other, Containers... rest) {
+    c.resize(c.size() + other.size());
+    std::move_backward(other.begin(), other.end(), c.end());
+    return concat(std::move(c), std::forward<Containers>(rest)...);
+}
 
 template<typename C, typename T = typename C::value_type>
 inline T min(C c) {

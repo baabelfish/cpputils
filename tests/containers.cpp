@@ -1,6 +1,9 @@
 #include "../lib/ytest/ytest.hpp"
 #include "../cu.hpp"
 
+#include <deque>
+#include <list>
+#include <forward_list>
 #include <cmath>
 #include <map>
 #include <string>
@@ -13,6 +16,27 @@ struct OtherType {
 yTestPackage containers([]{
     describe("container module", []{
         std::vector<int> x{1,2,3,4};
+
+        it("has prepend", []{
+            std::deque<int> x{1,2};
+            std::list<int> y{3,4};
+
+            std::forward_list<int> x2{1,2};
+            std::list<int> y2{3,4};
+
+            auto z = cu::prepend(x, y);
+            auto z2 = cu::prepend(x2, y2);
+
+            Assert().isEqual(z, {3,4,1,2});
+            Assert().isEqual(z2, {3,4,1,2});
+        });
+
+        it("has concat", []{
+            std::vector<int> x{1,2};
+            std::list<int> y{3,4};
+            auto z = cu::concat(x, y);
+            Assert().isEqual(z, {1,2,3,4});
+        });
 
         it("can groupBy", []{
             std::vector<float> x{1.3, 1.5, 1.2, 2.3, 2.5, 3.7};
