@@ -44,9 +44,8 @@ class Chain {
 public:
     Chain(T v):
         m_fs(),
-        m_v(v) {}
+        m_v(std::move(v)) {}
     virtual ~Chain() {}
-
     virtual Chain<T> copy() const { return *this; }
 
     Chain<T>& custom(FunctionType f) {
@@ -59,20 +58,22 @@ public:
         return std::move(m_v);
     }
 
-    _StaticUtilities(cf, delay)
     _StaticUtilities(cf, after)
-    _StaticUtilities(cf, once)
-    _StaticUtilities(cf, wrap)
-    _StaticUtilities(cf, wait)
     _StaticUtilities(cf, defer)
+    _StaticUtilities(cf, delay)
+    _StaticUtilities(cf, once)
     _StaticUtilities(cf, uniqueId)
+    _StaticUtilities(cf, wait)
+    _StaticUtilities(cf, wrap)
 
     _ChainableUtilities(cf, listen)
     _ChainableUtilities(cf, pipe)
     _ChainableUtilities(cf, tap)
     _ChainableUtilities(cu, at)
+    _ChainableUtilities(cu, concat)
     _ChainableUtilities(cu, filter)
     _ChainableUtilities(cu, map)
+    _ChainableUtilities(cu, prepend)
     _ChainableUtilities(cu, reject)
     _ChainableUtilities(cu, sort)
     _ChainableUtilities(cu, unique)
