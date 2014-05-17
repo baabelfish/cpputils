@@ -22,6 +22,12 @@
 namespace cu {
 
 template<typename C>
+inline C reverse(C c) {
+    std::reverse(c.begin(), c.end());
+    return std::move(c);
+}
+
+template<typename C>
 inline C prepend(C c) { return std::move(c); }
 template<typename C, typename T = typename C::value_type, typename CF, typename... Containers>
 inline C prepend(C c, CF other, Containers... rest) {
