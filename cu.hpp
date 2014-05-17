@@ -5,4 +5,5 @@
 #include "utils/functions.hpp"
 #include "utils/associative_containers.hpp"
 #include "utils/tmp.hpp"
+#include "utils/function_traits.hpp"
 #include "utils/datastructures/minmax.hpp"

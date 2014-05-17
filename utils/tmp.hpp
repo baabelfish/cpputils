@@ -1,5 +1,6 @@
 #pragma once
 
+#include <tuple>
 #include <functional>
 
 namespace cu {
@@ -22,12 +23,6 @@ template<typename T, typename... Args>
 inline T nth(std::size_t n, T h, Args... args) {
     return n == 0 ? h : nth(n - 1, std::forward<Args>(args)...);
 }
-
-template<typename T, typename Y>
-struct isSame { static const bool value = false; };
-
-template<typename T>
-struct isSame<T, T> { static const bool value = true; };
 
 } // namespace tmp
 } // namespace cu
