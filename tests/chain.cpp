@@ -26,7 +26,6 @@ yTestPackage chain([]{
         it("uses move semantics", [=]{
             auto l = _(X);
             Assert().isEqual(l.values(), {1,2,3});
-
             auto r = l.values();
             Assert().isEqual(r, {1,2,3})
                     .isEqual(l.values(), {});

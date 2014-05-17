@@ -31,14 +31,6 @@ yTestPackage function_module([]{
 
         it("has wait", []{ cf::wait(10); });
 
-        it("has once", []{
-            auto f = cf::once([](int a, int b) { return a + b; });
-            auto v1 = f(8, 5),
-                 v2 = f(10, 10);
-            Assert().isEqual(v1, 13);
-            Assert().isEqual(v1, v2);
-        });
-
         it("has wrap", []{
             auto f = cf::wrap(15, [](int a, int b) { return a + b; });
             auto v = f(8);
@@ -77,6 +69,16 @@ yTestPackage function_module([]{
             Assert().isEqual(x, 10);
         });
 
+
+#ifdef __clang__
+        it("has once", []{
+            auto f = cf::once([](int a, int b) { return a + b; });
+            auto v1 = f(8, 5),
+                 v2 = f(10, 10);
+            Assert().isEqual(v1, 13);
+            Assert().isEqual(v1, v2);
+        });
+
         it("can do after", []{
             int x = 0;
             auto aft = cf::after(3, [&]{ x = 5; });
@@ -98,6 +100,7 @@ yTestPackage function_module([]{
             aft();
             Assert().isEqual(x, 10);
         });
+#endif
 
     });
 });

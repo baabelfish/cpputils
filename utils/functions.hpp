@@ -18,16 +18,6 @@
 
 namespace cf {
 
-template<typename F, typename... Args>
-inline cu::internal::After<F, Args...> after(std::size_t amount, F f, Args... args) {
-    return std::move(cu::internal::After<F, Args...>(amount, f, std::forward<Args>(args)...));
-}
-
-template<typename F>
-inline cu::internal::Once<F> once(F f) {
-    return std::move(cu::internal::Once<F>(f));
-}
-
 template<typename T, typename F>
 inline cu::internal::Wrap<T, F> wrap(T t, F f) {
     return std::move(cu::internal::Wrap<T, F>(t, f));
@@ -85,5 +75,17 @@ template<typename T, typename F, typename... Args>
 inline T pipe(T v, F f, Args... args) {
     return f(v, std::forward<Args>(args)...);
 }
+
+#ifdef __clang__
+template<typename F, typename... Args>
+inline cu::internal::After<F, Args...> after(std::size_t amount, F f, Args... args) {
+    return std::move(cu::internal::After<F, Args...>(amount, f, std::forward<Args>(args)...));
+}
+
+template<typename F>
+inline cu::internal::Once<F> once(F f) {
+    return std::move(cu::internal::Once<F>(f));
+}
+#endif
 
 } // namespace cu

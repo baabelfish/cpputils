@@ -14,7 +14,7 @@ namespace cu {
 namespace internal {
 
 template<typename R, typename KC, typename VC, typename K = typename KC::value_type, typename V = typename VC::value_type>
-R abstractZip(KC kc, VC vc) {
+inline R abstractZip(KC kc, VC vc) {
     R m;
     auto kit = kc.begin();
     auto vit = vc.begin();
@@ -40,6 +40,7 @@ protected:
 
 } // namespace aux
 
+#ifdef __clang__
 template<typename F, typename... Args>
 class After {
     std::function<void()> m_f;
@@ -75,7 +76,7 @@ public:
     virtual ~Once() {}
 
     template<typename... Args>
-    auto operator()(Args... args) -> decltype(f(std::forward<Args>(args)...)) {
+    inline auto operator()(Args... args) -> decltype(f(std::forward<Args>(args)...)) {
         static std::vector<decltype(f(std::forward<Args>(args)...))> Revals;
         static std::mutex m; // FIXME
 
@@ -88,6 +89,7 @@ public:
         return Revals[at];
     }
 };
+#endif
 
 template<typename T, typename F>
 class Wrap {
@@ -100,7 +102,7 @@ public:
     virtual ~Wrap() {}
 
     template<typename... Args>
-    auto operator()(Args... args) -> decltype(m_f(m_t, std::forward<Args>(args)...)) {
+    inline auto operator()(Args... args) -> decltype(m_f(m_t, std::forward<Args>(args)...)) {
         return m_f(m_t, std::forward<Args>(args)...);
     }
 };
@@ -131,7 +133,7 @@ template<typename T> bool contains(const std::unordered_set<T>& s, T t) { return
 template<typename T, typename Y> bool contains(const std::unordered_map<T, Y>& s, T t) { return s.find(t) != s.end(); }
 
 template<typename C, typename T = typename C::value_type>
-bool contains(const C& c, T t) {
+inline bool contains(const C& c, T t) {
     for (auto& x : c) {
         if (x == t) { return true; }
     }
@@ -139,7 +141,7 @@ bool contains(const C& c, T t) {
 }
 
 template<typename T, typename Y, typename... Args>
-bool contains(T s, Y t, Args... args) {
+inline bool contains(T s, Y t, Args... args) {
     return contains(s, t) || contains(s, std::forward<Args>(args)...);
 }
 
