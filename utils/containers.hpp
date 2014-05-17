@@ -9,7 +9,6 @@
 
 // TODO:
 // without
-// reverse
 // union
 // difference
 // intersection

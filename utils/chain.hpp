@@ -75,6 +75,7 @@ public:
     _ChainableUtilities(cu, map)
     _ChainableUtilities(cu, prepend)
     _ChainableUtilities(cu, reject)
+    _ChainableUtilities(cu, reverse)
     _ChainableUtilities(cu, sort)
     _ChainableUtilities(cu, unique)
 
