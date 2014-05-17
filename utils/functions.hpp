@@ -14,6 +14,7 @@
 #include <iostream>
 #include <string>
 #include <future>
+#include <tuple>
 #include "internal.hpp"
 
 namespace cf {

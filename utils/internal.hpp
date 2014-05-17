@@ -76,17 +76,9 @@ public:
     virtual ~Once() {}
 
     template<typename... Args>
-    inline auto operator()(Args... args) -> decltype(f(std::forward<Args>(args)...)) {
-        static std::vector<decltype(f(std::forward<Args>(args)...))> Revals;
-        static std::mutex m; // FIXME
-
-        if (!executed) {
-            std::lock_guard<std::mutex> l(m); // FIXME
-            executed = true;
-            Revals.emplace_back();
-            Revals[at] = f(std::forward<Args>(args)...);
-        }
-        return Revals[at];
+    inline auto operator()(Args... args) -> decltype(f(args...)) {
+        static auto re = f(args...);
+        return re;
     }
 };
 #endif

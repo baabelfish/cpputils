@@ -69,7 +69,6 @@ yTestPackage function_module([]{
             Assert().isEqual(x, 10);
         });
 
-
 #ifdef __clang__
         it("has once", []{
             auto f = cf::once([](int a, int b) { return a + b; });

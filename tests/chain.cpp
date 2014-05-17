@@ -16,11 +16,16 @@ yTestPackage chain([]{
             Assert().isEqual(chain4.values(), {{1,2}, {3,4}});
         });
 
-        it("can copy", [=]{
+        it("can be copied", [=]{
             auto l = _(X);
             auto r = l.copy();
             Assert().isEqual(r.values(), {1,2,3})
                     .isEqual(l.values(), {1,2,3});
+            l = _(X).map([](int i) { return i + 1; });
+            auto l1 = l.copy().map([](int i) { return i * 2; }).values();
+            auto l2 = l.copy().map([](int i) { return i * 3; }).values();
+            Assert().isEqual(l1, {4, 6, 8})
+                    .isEqual(l2, {6, 9, 12});
         });
 
         it("uses move semantics", [=]{
@@ -43,15 +48,6 @@ yTestPackage chain([]{
                          .map([](int i) { return i * 2; })
                          .values();
             Assert().isEqual(l, {4, 6, 8});
-        });
-
-        it("is somewhat lazy", [=]{
-            auto l = _(X).map([](int i) { return i + 1; });
-            auto l1 = l.copy().map([](int i) { return i * 2; }).values();
-            auto l2 = l.copy().map([](int i) { return i * 3; }).values();
-
-            Assert().isEqual(l1, {4, 6, 8})
-                    .isEqual(l2, {6, 9, 12});
         });
 
         it("works with all chainables", [=]{
