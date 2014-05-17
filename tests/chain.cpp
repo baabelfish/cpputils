@@ -1,6 +1,8 @@
 #include "../lib/ytest/ytest.hpp"
 #include "../cu.hpp"
 
+#include <list>
+
 yTestPackage chain([]{
     describe("chaining module", []{
         std::vector<int> X{1,2,3};
@@ -83,6 +85,16 @@ yTestPackage chain([]{
                                 .unique()
                                 .map([](int i) { return i * 2; });
             Assert().isEqual(re.values(), {2, 4, 6, 8, 10, 12});
+        });
+
+        it("works with README.md example", [=]{
+            auto chain = _({1,2,3,4}).reject([](int i) { return i < 2; })
+                                     .reverse()
+                                     .concat(std::list<int>{1,2})
+                                     .map([](int i) { return i * 2; })
+                                     .concat(std::vector<int>{3});
+            Assert().isEqual(chain.values(), { 8, 6, 4, 2, 4, 3 });
+            Assert().isTrue(chain.contains(8, 6, 3));
         });
 
     });

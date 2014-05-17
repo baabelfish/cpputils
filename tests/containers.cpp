@@ -173,15 +173,6 @@ yTestPackage containers([]{
             Assert().isEqual(v, 3);
         });
 
-        it("works with README.md example", [=]{
-            auto chain = _({1,2,3,4}).reject([](int i) { return i < 2; })
-                                     .reverse()
-                                     .concat(std::list<int>{1,2})
-                                     .map([](int i) { return i * 2; })
-                                     .concat(std::vector<int>{3});
-            Assert().isEqual(chain.values(), {8,6,4,2,4,3});
-        });
-
         it("has fold", [=]{
             auto val1 = cu::fold(std::vector<int>{}, [](int acc, int i) { return acc + i; }),
                  val2 = cu::fold(std::vector<int>{1}, [](int acc, int i) { return acc + i; }),
