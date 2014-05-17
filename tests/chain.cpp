@@ -97,7 +97,7 @@ yTestPackage chain([]{
         it("works with README.md example", [=]{
             auto chain = _({1,2,3,4}).reject([](int i) { return i < 2; })
                                      .reverse()
-                                     .concat(cu::vec(1,2))
+                                     .concat(cu::list(1,2))
                                      .map([](int i) { return i * 2; })
                                      .concat(cu::vec(3));
             Assert().isEqual(chain.values(), { 8, 6, 4, 2, 4, 3 });

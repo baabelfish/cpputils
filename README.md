@@ -89,9 +89,9 @@ function_traits
 ```cpp
 auto chain = _({1,2,3,4}).reject([](int i) { return i < 2; })
                          .reverse()
-                         .concat(std::list<int>{1,2})
+                         .concat(cu::list(1,2))
                          .map([](int i) { return i * 2; })
-                         .concat(std::vector<int>{3});
+                         .concat(cu::vec(3));
 Assert().isEqual(chain.values(), { 8, 6, 4, 2, 4, 3 });
 Assert().isTrue(chain.contains(8, 6, 3));
 ```
