@@ -12,11 +12,17 @@
 
 // TODO:
 // without
+// clear
 // union
 // difference
 // intersection
 // zip
 // lazyrange (with c++17)
+// repeat (container * n)
+// subset
+// superset
+// empty
+// mergeWith
 
 // sample
 // invoke
