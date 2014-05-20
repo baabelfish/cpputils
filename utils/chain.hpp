@@ -46,7 +46,7 @@ public:
         return *this;
     }
 
-    virtual C&& values() {
+    virtual C&& value() {
         return std::move(m_v);
     }
 
