@@ -5,6 +5,18 @@
 namespace cd {
 namespace experimental {
 
+#define MixinInterfaceVoid(CLASS, FROM, TO)\
+template<typename... Args>\
+inline void TO(Args... args) {\
+    comp<CLASS>().FROM(std::forward<Args>(args)...);\
+}
+
+#define MixinInterface(CLASS, FROM, TO)\
+template<typename... Args>\
+inline auto TO(Args... args) -> decltype(comp<CLASS>().FROM(std::forward<Args>(args)...)) {\
+    return comp<CLASS>().FROM(std::forward<Args>(args)...);\
+}
+
 template<typename T, typename Tuple> struct getComponent;
 
 template<typename T, typename... Types>
@@ -15,12 +27,6 @@ struct getComponent<T, std::tuple<T, Types...>> {
 template<typename T, typename O, typename... Types>
 struct getComponent<T, std::tuple<O, Types...>> {
     static const std::size_t index = getComponent<T, std::tuple<Types...>>::index + 1;
-};
-
-template<typename T>
-class Component {
-public:
-    virtual inline T& operator()() { return *static_cast<T*>(this); }
 };
 
 template<class... Types>
@@ -35,6 +41,12 @@ public:
     inline auto comp(Args... args) -> decltype(std::get<getComponent<T, decltype(tp)>::index>(tp)(args...)) {
         return std::get<getComponent<T, decltype(tp)>::index>(tp)(args...);
     }
+};
+
+template<typename T>
+class Component {
+public:
+    virtual inline T& operator()() { return *static_cast<T*>(this); }
 };
 
 template<typename T, typename M, typename... Args>
