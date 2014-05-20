@@ -17,6 +17,12 @@ struct getComponent<T, std::tuple<O, Types...>> {
     static const std::size_t index = getComponent<T, std::tuple<Types...>>::index + 1;
 };
 
+template<typename T>
+class Component {
+public:
+    virtual inline T& operator()() { return *static_cast<T*>(this); }
+};
+
 template<class... Types>
 class Mixin {
     std::tuple<Types...> tp;
@@ -26,7 +32,7 @@ public:
     virtual ~Mixin() {}
 
     template<typename T, typename... Args>
-    auto comp(Args... args) -> decltype(std::get<getComponent<T, decltype(tp)>::index>(tp)(args...)) {
+    inline auto comp(Args... args) -> decltype(std::get<getComponent<T, decltype(tp)>::index>(tp)(args...)) {
         return std::get<getComponent<T, decltype(tp)>::index>(tp)(args...);
     }
 };
