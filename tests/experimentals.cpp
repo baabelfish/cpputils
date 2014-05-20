@@ -49,13 +49,9 @@ yTestPackage experimentals([]{
             SingleInterface si;
             si.set(10);
 
-            auto re1 = si.method42(),
-                 re2 = si.get();
-            auto re3 = si.foobar();
-
-            Assert().isEqual(re1, 42)
-                    .isEqual(re2, 10)
-                    .isEqual(re3, true);
+            Assert().isEqual(si.method42(), 42)
+                    .isEqual(si.get(), 10)
+                    .isEqual(si.foobar(), true);
         });
     });
 });
