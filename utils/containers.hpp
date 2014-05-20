@@ -11,6 +11,7 @@
 #include "datastructures/minmax.hpp"
 
 // TODO:
+// mapcat
 // without
 // clear
 // union
@@ -23,6 +24,7 @@
 // superset
 // empty
 // mergeWith
+// fill
 
 // sample
 // invoke
