@@ -56,7 +56,6 @@ yTestPackage experimentals([]{
             Assert().isEqual(re1, 42)
                     .isEqual(re2, 10)
                     .isEqual(re3, true);
-            Assert().isEqual(si.get(), 10);
         });
     });
 });
