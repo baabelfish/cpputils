@@ -20,11 +20,7 @@ public:
     bool foobar() { return true; }
 };
 
-class SingleInterface : public cd::experimental::Mixin<A, B, C> {
-public:
-    SingleInterface() {}
-    virtual ~SingleInterface() {}
-
+struct SingleInterface : public cd::experimental::Mixin<A, B, C> {
     MixinInterface(A, method42, method42)
     MixinInterfaceVoid(B, set, set)
     MixinInterface(B, get, get)

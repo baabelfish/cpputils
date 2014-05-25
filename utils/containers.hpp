@@ -1,5 +1,8 @@
 #pragma once
 
+#include <type_traits>
+#include <queue>
+#include <stack>
 #include <set>
 #include <forward_list>
 #include <unordered_set>
@@ -11,9 +14,7 @@
 #include "datastructures/minmax.hpp"
 
 // TODO:
-// mapcat
 // without
-// clear
 // union
 // difference
 // intersection
@@ -69,13 +70,28 @@ __ContainerConvertHelper(list,list)
 __ContainerConvertHelper(deque,deque)
 __ContainerConvertHelper(vec,vector)
 
+template<typename C,
+         typename T = typename C::value_type,
+         typename std::enable_if<std::is_same<C, std::stack<T>>::value ||
+                                 std::is_same<C, std::queue<T>>::value>::type* = nullptr>
+inline void clear(C& c) {
+    while (!c.empty()) { c.pop(); }
+}
+
+template<typename C,
+         typename T = typename C::value_type,
+         typename std::enable_if<!std::is_same<C, std::stack<T>>::value &&
+                                 !std::is_same<C, std::queue<T>>::value>::type* = nullptr>
+inline void clear(C& c) {
+    c.clear();
+}
+
 template<typename C, typename T = typename C::value_type>
 inline std::forward_list<T> flist(C c) {
     std::forward_list<T> n;
     n.insert_after(n.before_begin(), std::make_move_iterator(c.begin()), std::make_move_iterator(c.end()));
     return n;
 }
-
 
 template<typename C>
 inline C reverse(C c) {
@@ -255,6 +271,24 @@ inline C at(C c, Args... args) {
     C n;
     internal::at(n, c, std::forward<Args>(args)...);
     return std::move(n);
+}
+
+namespace internal {
+template<typename F, typename C>
+inline C mapcat(F, C&& con) {
+    return std::move(con);
+}
+
+template<typename F, typename C, typename... Rest>
+inline C mapcat(F f, C&& re, C left, Rest... containers) {
+    return mapcat(f, concat(std::move(re), f(left)), std::forward<Rest>(containers)...);
+}
+
+} // namespace internal
+
+template<typename F, typename C, typename... Rest>
+inline C mapcat(F f, C left, Rest... containers) {
+    return internal::mapcat(f, std::move(f(std::move(left))), std::forward<Rest>(containers)...);
 }
 
 // TODO: Add optional n

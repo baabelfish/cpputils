@@ -72,7 +72,6 @@ public:
         at(uniqueId()),
         f(f) {}
 
-
     virtual ~Once() {}
 
     template<typename... Args>

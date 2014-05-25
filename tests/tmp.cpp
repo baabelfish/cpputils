@@ -1,4 +1,5 @@
 #include "../lib/ytest/ytest.hpp"
+#include <type_traits>
 #include "../cu.hpp"
 
 #include <string>
@@ -15,6 +16,7 @@ struct TestStruct {
 
 yTestPackage pkgFunctionTraits([]{
     describe("function traits", []{
+
         it("works with free functions", []{
             testFunc(5, 5);
             typedef cu::tmp::function_traits<decltype(testFunc)> f_type;
@@ -45,6 +47,12 @@ yTestPackage pkgFunctionTraits([]{
 
     });
 });
+
+class Testi {
+public:
+    void wat() {
+    }
+};
 
 yTestPackage tmp([]{
     describe("template metaprogramming helpers", []{

@@ -3,7 +3,7 @@ clear
 cd tests
 while true; do
     clear
-    clang++ -Wfatal-errors -Wall -o ytests *.cpp -lpthread -std=c++11 && clear && ./ytests
+    clang++ -g -Wfatal-errors -Wall -o ytests *.cpp -lpthread -std=c++11 && clear && ./ytests
 
     if [[ $(which inotifywait) == "" ]]; then
         sleep 5

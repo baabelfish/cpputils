@@ -49,6 +49,30 @@ yTestPackage containers([]{
             Assert().isEqual(z2, {3,4,1,2});
         });
 
+        it("can clear", []{
+            auto x = cu::vec(1,2,3);
+            std::stack<int> y;
+            std::queue<int> z;
+            y.push(1);
+            y.push(2);
+            y.push(3);
+            z.push(1);
+            cu::clear(x);
+            cu::clear(y);
+            cu::clear(z);
+            Assert().isTrue(x.empty())
+                    .isTrue(y.empty())
+                    .isTrue(z.empty());
+        });
+
+        it("has mapcat", []{
+            std::vector<int> x{3,2,1},
+                             y{6,5,4},
+                             z{9,8,7};
+            auto w = cu::mapcat(&cu::sort<decltype(x)>, x, y, z);
+            Assert().isEqual(w, {1,2,3,4,5,6,7,8,9});
+        });
+
         it("has concat", []{
             std::vector<int> x{1,2};
             std::list<int> y{3,4};
