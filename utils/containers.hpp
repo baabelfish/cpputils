@@ -14,11 +14,10 @@
 #include "datastructures/minmax.hpp"
 
 // TODO:
+// joint
 // without
-// union
 // difference
 // intersection
-// zip
 // lazyrange (with c++17)
 // repeat (container * n)
 // subset
@@ -32,7 +31,9 @@
 
 #define __ContainerConstructorHelper(NAME,TYPE)\
 template<typename T, typename... Args>\
-inline std::TYPE<T> NAME(T t, Args... args) { return std::TYPE<T>{t, args...}; }
+inline std::TYPE<T> NAME(T t, Args... args) { return std::TYPE<T>{t, args...}; }\
+template<typename T>\
+inline std::TYPE<T> NAME() { return std::TYPE<T>(); }
 
 #define __ContainerConvertHelperSet(NAME,TYPE)\
 template<typename C, typename T = typename C::value_type>\
@@ -69,6 +70,14 @@ __ContainerConvertHelperSet(multiuset,unordered_multiset)
 __ContainerConvertHelper(list,list)
 __ContainerConvertHelper(deque,deque)
 __ContainerConvertHelper(vec,vector)
+
+template<typename C>
+inline bool empty(const C& c) { return c.empty(); }
+
+template<typename C, typename... Rest>
+inline bool empty(const C& c, Rest... rest) {
+    return empty(c) && empty(std::forward<Rest>(rest)...);
+}
 
 template<typename C,
          typename T = typename C::value_type,

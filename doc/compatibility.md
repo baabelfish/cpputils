@@ -27,10 +27,14 @@
 | size                  |    x   |    x   |     x   |        |    x   |      x     |    x   |    x     |        |
 | sort                  |    x   |    x   |     x   |    x   |        |            |        |          |        |
 | unique                |    x   |    x   |     x   |    x   |        |            |        |          |        |
+| joint                 |    x   |    x   |     x   |    x   |    x   |      x     |        |          |    x   |
 | zipMap                |    x   |    x   |     x   |    x   |        |            |        |          |        |
 | zipMultiMap           |    x   |    x   |     x   |    x   |        |            |        |          |        |
 | zipUnorderedMap       |    x   |    x   |     x   |    x   |        |            |        |          |        |
 | zipUnorderedMultiMap  |    x   |    x   |     x   |    x   |        |            |        |          |        |
+| clear                 |    x   |    x   |     x   |    x   |    x   |      x     |    x   |    x     |        |
+| mapcat                |        |        |         |        |        |            |        |          |        |
+|                       |        |        |         |        |        |            |        |          |        |
 
 
 | Associative functions | vector | deque  |  list   | flist  |  set   |  multiset  |  map  | multimap | 

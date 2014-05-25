@@ -14,6 +14,14 @@ struct OtherType {
 };
 
 yTestPackage containers([]{
+    describe("container module checks", []{
+        it("can check emptines", []{
+            auto v = cu::vec<int>();
+            auto l = cu::list<float>();
+            Assert().isTrue(cu::empty(l, v));
+        });
+    });
+
     describe("container module", []{
         std::vector<int> x{1,2,3,4};
 
