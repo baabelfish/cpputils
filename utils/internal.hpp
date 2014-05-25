@@ -109,6 +109,15 @@ inline void at(C& n, C c, std::size_t i, Args... args) {
     at(n, c, std::forward<Args>(args)...);
 }
 
+template<typename T>
+inline void joint(std::set<T>&) {}
+
+template<typename C, typename T = typename C::value_type, typename... Rest>
+inline void joint(std::set<T>& t, C c, Rest... rest) {
+    for (auto& x : c) { t.insert(x); }
+    joint(t, std::forward<Rest>(rest)...);
+}
+
 template<typename T> bool contains(const std::string& s, T t) { return s.find(t) != std::string::npos; }
 template<typename T> bool contains(const std::wstring& s, T t) { return s.find(t) != std::wstring::npos; }
 template<typename T> bool contains(const std::u16string& s, T t) { return s.find(t) != std::u16string::npos; }

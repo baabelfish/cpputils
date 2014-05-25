@@ -22,7 +22,6 @@
 // repeat (container * n)
 // subset
 // superset
-// empty
 // mergeWith
 // fill
 
@@ -77,6 +76,13 @@ inline bool empty(const C& c) { return c.empty(); }
 template<typename C, typename... Rest>
 inline bool empty(const C& c, Rest... rest) {
     return empty(c) && empty(std::forward<Rest>(rest)...);
+}
+
+template<typename C, typename T = typename C::value_type, typename... Rest>
+inline std::set<T> joint(C c, Rest... rest) {
+    std::set<T> t;
+    internal::joint(t, c, std::forward<Rest>(rest)...);
+    return t;
 }
 
 template<typename C,

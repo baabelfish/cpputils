@@ -32,10 +32,10 @@ yTestPackage experimentals([]{
 
         it("somewhat works", []{
             cd::experimental::Mixin<A, B, C> mixin;
-            mixin.comp<B>().set(10);
-            auto re1 = mixin.comp<A>().method42(),
-                 re2 = mixin.comp<B>().get();
-            auto re3 = mixin.comp<C>().foobar();
+            mixin.component<B>().set(10);
+            auto re1 = mixin.component<A>().method42(),
+                 re2 = mixin.component<B>().get();
+            auto re3 = mixin.component<C>().foobar();
             Assert().isEqual(re1, 42)
                     .isEqual(re2, 10)
                     .isEqual(re3, true);
@@ -44,10 +44,10 @@ yTestPackage experimentals([]{
         it("works with a single interface ", []{
             SingleInterface si;
             si.set(10);
-
             Assert().isEqual(si.method42(), 42)
                     .isEqual(si.get(), 10)
                     .isEqual(si.foobar(), true);
         });
+
     });
 });

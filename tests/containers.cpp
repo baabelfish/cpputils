@@ -73,6 +73,14 @@ yTestPackage containers([]{
                     .isTrue(z.empty());
         });
 
+        it("has joint", []{
+            std::vector<int> x{1,2,3},
+                             y{2,3},
+                             z{0,3,4};
+            auto w = cu::joint(x, y, z);
+            Assert().isEqual(w, {0,1,2,3,4});
+        });
+
         it("has mapcat", []{
             std::vector<int> x{3,2,1},
                              y{6,5,4},
