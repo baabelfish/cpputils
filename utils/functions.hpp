@@ -15,6 +15,7 @@
 #include <string>
 #include <future>
 #include <tuple>
+#include <chrono>
 #include "internal.hpp"
 
 namespace cf {
@@ -54,6 +55,14 @@ inline std::size_t uniqueId() { return cu::internal::uniqueId(); }
 template<typename F, typename... Args>
 inline void times(std::size_t amount, F f, Args... args) {
     for (std::size_t i = 0; i < amount; ++i) { f(std::forward<Args>(args)...); }
+}
+
+template<typename F, typename... Args>
+inline std::size_t time(F f, Args&&... args) {
+    auto start = std::chrono::steady_clock::now();
+    f(std::forward<Args>(args)...);
+    auto diff = std::chrono::steady_clock::now() - start;
+    return diff.count();
 }
 
 template<typename T, typename F>

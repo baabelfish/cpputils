@@ -4,6 +4,18 @@
 #include <string>
 
 yTestPackage strings([]{
+
+    describe("levenshtein distance", []{
+        it("can calculate it", []{
+            std::string a = "abbreviation";
+            Assert().isEqual(cs::levenshteinDistance(a, std::string("abbreviation")), 0);
+            Assert().isEqual(cs::levenshteinDistance(a, std::string("bbbreviation")), 1);
+            Assert().isEqual(cs::levenshteinDistance(a, std::string("abbrevation")), 1);
+            Assert().isEqual(cs::levenshteinDistance(a, std::string("bbbrevationz")), 3);
+            Assert().isEqual(cs::levenshteinDistance(a, std::string("")), 12);
+        });
+    });
+
     describe("string module", []{
 
         it("can join", []{
