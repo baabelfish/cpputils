@@ -7,6 +7,7 @@
 // partial
 // compose (just use lambdas?)
 
+#include <random>
 #include <vector>
 #include <mutex>
 #include <thread>
@@ -23,6 +24,11 @@ namespace cf {
 template<typename T, typename F>
 inline cu::internal::Wrap<T, F> wrap(T t, F f) {
     return std::move(cu::internal::Wrap<T, F>(t, f));
+}
+
+inline unsigned random(unsigned low, unsigned high) {
+    static std::random_device rd;
+    return rd() % (high - low) + low;
 }
 
 inline void wait(std::size_t ms) { std::this_thread::sleep_for(std::chrono::milliseconds(ms)); }
