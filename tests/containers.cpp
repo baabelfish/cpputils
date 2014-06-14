@@ -11,6 +11,10 @@
 struct OtherType {
     int old_value;
     int new_value;
+
+    bool operator==(const OtherType& other) const {
+        return other.old_value == old_value && other.new_value == new_value;
+    }
 };
 
 yTestPackage containers([]{
@@ -139,11 +143,14 @@ yTestPackage containers([]{
         });
 
         it("can sort", []{
-            Assert().isEqual(cu::sort(std::vector<int>{1,4,2,3}), {1,2,3,4});
+            Assert().isEqual(cu::sort(cu::vec(1,4,2,3)), {1,2,3,4});
         });
 
         it("can sort with a function", []{
-            Assert().isEqual(cu::sort(std::vector<int>{1,4,2,3}, [](int a, int b) { return a > b; }), {4,3,2,1});
+            std::vector<OtherType> temp{{3,4},{1,2}};
+            temp = cu::sort(temp, [](const OtherType& a) { return a.old_value; });
+            // temp = cu::sort(temp, cf::identity);
+            Assert().isEqual(temp, {{1,2}, {3,4}});
         });
 
         it("inplace map", [=]{

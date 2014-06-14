@@ -28,6 +28,8 @@ inline cu::internal::Wrap<T, F> wrap(T t, F f) {
 
 inline unsigned random(unsigned low, unsigned high) {
     static std::random_device rd;
+    static std::mutex mtx;
+    std::lock_guard<std::mutex> l(mtx);
     return rd() % (high - low) + low;
 }
 
@@ -51,7 +53,7 @@ inline auto delay(std::size_t ms, F f, Args... args) -> decltype(std::async(std:
 
 template<typename T, typename... Args>
 inline T identity(T v, Args...) {
-    return std::move(v);
+    return std::forward<T>(v);
 }
 
 inline std::string uniqueId(std::string prefix) { return prefix + std::to_string(cu::internal::uniqueId()); }

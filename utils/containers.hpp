@@ -198,9 +198,11 @@ inline std::unordered_map<T, std::size_t> frequencies(std::initializer_list<T> c
     return frequencies<std::initializer_list<T>>(c);
 }
 
-template<typename C, typename F>
+template<typename C, typename T = typename C::value_type, typename F>
 inline C sort(C c, F f) {
-    std::sort(c.begin(), c.end(), f);
+    std::sort(c.begin(), c.end(), [f](const T& a, const T& b) -> bool {
+        return f(a) < f(b);
+    });
     return std::move(c);
 }
 

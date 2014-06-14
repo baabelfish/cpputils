@@ -1,5 +1,7 @@
 #include "../lib/ytest/ytest.hpp"
 #include "../utils/experimental/mixin.hpp"
+#include "../utils/experimental/async.hpp"
+#include "../utils/functions.hpp"
 
 class A {
 public:
@@ -27,7 +29,32 @@ struct SingleInterface : public cd::experimental::Mixin<A, B, C> {
     MixinInterface(C, foobar, foobar)
 };
 
+void printtaa(std::size_t id, std::string msg) {
+    static std::mutex tex;
+    std::lock_guard<std::mutex> l(tex);
+    std::cout << id << ": " << msg << std::endl;
+}
+
 yTestPackage experimentals([]{
+    describe("async", []{
+        // using namespace ce;
+        // for (std::size_t i = 0; i < 50000; ++i) {
+        //     async([](int i){
+        //         printtaa(i, "ekassa");
+        //         async([](int i){
+        //             printtaa(i, "tokassa");
+        //         }, i);
+        //         async([](int i){
+        //             printtaa(i, "toka rinnakkainen");
+        //             async([](int i){
+        //                 printtaa(i, "kolmas rinnakkainen");
+        //             }, i);
+        //         }, i);
+        //     }, i);
+        // }
+        // std::cout << "launched" << std::endl;
+    });
+
     describe("Mixin", []{
 
         it("somewhat works", []{
