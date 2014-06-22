@@ -3,6 +3,7 @@
 #include "../cu.hpp"
 
 #include <string>
+#include <list>
 
 static int testFunc(int a, int b) {
     return a + b;
@@ -67,5 +68,43 @@ yTestPackage tmp([]{
             Assert().isEqual(x, "hello");
         });
 
+    });
+});
+
+template<typename T,
+         cu::tmp::enable_if<std::is_scalar<T>>* = nullptr>
+int something(T) {
+    return 1;
+}
+
+template<typename T,
+         cu::tmp::enable_if<cu::tmp::has_random_access_iterators<T>>* = nullptr>
+int something(T) {
+    return 2;
+}
+
+template<typename T,
+         cu::tmp::enable_if<cu::tmp::has_bidirectional_iterators<T>>* = nullptr>
+int something(T) {
+    return 3;
+}
+
+template<typename T,
+         cu::tmp::enable_if<cu::tmp::has_forward_iterators<T>>* = nullptr>
+int something(T) {
+    return 4;
+}
+
+yTestPackage traitHelpers([]{
+    describe("", []{
+        it("", [] {
+            std::vector<int> raitest;
+            std::list<int> bidirtest;
+            std::forward_list<int> forwtest;
+            Assert().isEqual(something(5), 1)
+                    .isEqual(something(raitest), 2)
+                    .isEqual(something(bidirtest), 3)
+                    .isEqual(something(forwtest), 4);
+        });
     });
 });
